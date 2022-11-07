@@ -1,4 +1,3 @@
-const year = 31558149540
 const day = 86164091
 const offset = 22906350
 

@@ -4,7 +4,8 @@
     import { onMount } from 'svelte'
     import engine, { reset } from './engine'
     import type { star } from '../util/types'
-    import sidereal from '../util/sidereal'
+    import shuffle from '../util/shuffle'
+    import { formatTime, resetTimer, stopTimer, timer } from '../util/timer'
 
     export let stars: star[]
     export let starsIndexed: { [key: string]: star }
@@ -46,8 +47,10 @@
         tries = 0
         wrongClicks = 0
         correctClicks = 0
-        starLabels = Array<{ hic: string; frame: number; correct: boolean }>()
+        starLabels = []
+        answers = shuffle(answers)
         reset()
+        resetTimer()
     }
 
     const updateOverlay = (ctx: CanvasRenderingContext2D, fov: number) => {
@@ -74,6 +77,7 @@
         flashFrame = 0
         if (round >= rounds) {
             completed = true
+            stopTimer()
         }
     }
 
@@ -198,6 +202,8 @@
     }
 
     onMount(() => {
+        resetGame()
+
         const gl = canvas.getContext('webgl2')
         engine(
             gl,
@@ -242,16 +248,21 @@
         percentage={correctClicks + wrongClicks === 0
             ? 0
             : Math.round((100 * correctClicks) / (correctClicks + wrongClicks))}
+        completed={round}
+        total={rounds}
     />
 {:else}
     <div class="container">
         <div class="result">
             <h1>Result</h1>
-            <h2>
-                {Math.round(
-                    (100 * correctClicks) / (correctClicks + wrongClicks)
-                )}%
-            </h2>
+            <div>
+                <h2>
+                    {Math.round(
+                        (100 * correctClicks) / (correctClicks + wrongClicks)
+                    )}%
+                </h2>
+                <h2>{formatTime($timer)}</h2>
+            </div>
             <div>
                 <button on:click={resetGame}>Play Again</button>
                 <button
@@ -283,7 +294,8 @@
 
     h1,
     h2 {
-        margin: 0;
+        margin: 0.25rem;
+        display: inline;
     }
 
     button {

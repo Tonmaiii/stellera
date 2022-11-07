@@ -14,7 +14,7 @@
     const includedConstellation = Array(constellations.length).fill(false)
     const identifiers = Array(greekLetters.length)
         .fill(false)
-        .map((_, i) => i < 3)
+        .map((_, i) => i < 1)
 
     const generateGameCode = (
         showConstellation: boolean,
@@ -88,7 +88,7 @@
         </div>
         {#if !showAllDesignations}
             <div class="grid">
-                {#each greekLetters.slice(0, 5) as { abbreviation, name }, i}
+                {#each greekLetters.slice(0, 5) as { name }, i}
                     <div>
                         {[name[0].toUpperCase(), ...name.slice(1)].join('')}
                     </div>
@@ -98,11 +98,11 @@
             <button on:click={() => (showAllDesignations = true)}>More</button>
         {:else}
             <div class="grid">
-                {#each greekLetters as { abbreviation, name }}
+                {#each greekLetters as { name }, i}
                     <div>
                         {[name[0].toUpperCase(), ...name.slice(1)].join('')}
                     </div>
-                    <Toggle />
+                    <Toggle bind:checked={identifiers[i]} />
                 {/each}
             </div>
         {/if}

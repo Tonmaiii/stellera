@@ -4,7 +4,6 @@
     import greekLetters from '../util/greekLetters'
     import constellationNames from '../util/constellationNames'
     import type { star } from '../util/types'
-    import shuffle from '../util/shuffle'
     import { location } from '../util/geolocation'
 
     export let params
@@ -57,7 +56,7 @@
             {#await data}
                 Loading Stars Data...
             {:then value}
-                {#if location}
+                {#if $location}
                     <button
                         on:click={() => {
                             starData = value
@@ -73,6 +72,12 @@
 
             Game Settings <br />
             <br />
+            {#if $location}
+                Latitude: {$location.latitude}<br />
+                Longitude: {$location.longitude}<br />
+                Time: realtime<br />
+                <br />
+            {/if}
             Use Designation: {useDesignation}<br />
             Show Constellation: {showConstellation}<br />
             <br />
@@ -91,14 +96,14 @@
         </main>
     {:else}
         <Game
-            answers={shuffle(generateIncludedStars(starData[0]))}
+            answers={generateIncludedStars(starData[0])}
             stars={starData[0]}
             starsIndexed={starData[1]}
             constellationship={starData[3]}
             {useDesignation}
             {showConstellation}
-            latitude={location.latitude}
-            longitude={location.longitude}
+            latitude={$location.latitude}
+            longitude={$location.longitude}
         />
     {/if}
 {:else}

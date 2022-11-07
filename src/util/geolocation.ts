@@ -1,17 +1,19 @@
-export let location = null
+import { writable } from 'svelte/store'
+
+export const location = writable<{ latitude: number; longitude: number }>(null)
 
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
         position => {
-            location = {
+            location.set({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude
-            }
+            })
         },
         () => {
-            location = { latitude: 0, longitude: 0 }
+            location.set({ latitude: 0, longitude: 0 })
         }
     )
 } else {
-    location = { latitude: 0, longitude: 0 }
+    location.set({ latitude: 0, longitude: 0 })
 }
