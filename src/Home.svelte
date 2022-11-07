@@ -9,7 +9,7 @@
     let useDesignation = false
     let showConstellation = false
 
-    let starWithName = true
+    let starWithName = false
 
     const includedConstellation = Array(constellations.length).fill(false)
     const identifiers = Array(greekLetters.length)
@@ -64,7 +64,7 @@
     <div class="section">
         <h1>Include Constellations</h1>
         <div class="select">
-            <div><strong>Include all</strong></div>
+            <div><strong>Include all constellations</strong></div>
             <input type="checkbox" bind:checked={includeAllConstellations} />
         </div>
 

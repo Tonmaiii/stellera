@@ -1,4 +1,5 @@
 import { mat4, glMatrix } from 'gl-matrix'
+import sidereal from '../util/sidereal'
 import type { star } from '../util/types'
 
 let mouseX = 0
@@ -28,8 +29,12 @@ export default (
     lines: number[],
     data: Float32Array,
     drawLines: boolean,
-    callback: (fov: number) => void
+    callback: (fov: number) => void,
+    latitude: number,
+    longitude: number
 ) => {
+    const latitudeRadians = ((-latitude + 90) / 180) * Math.PI
+
     gl.clearColor(0, 0, 0, 1)
     gl.enable(gl.BLEND)
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
@@ -67,6 +72,11 @@ export default (
 
     const matViewUniformLocation = gl.getUniformLocation(program, 'mView')
     const matProjUniformLocation = gl.getUniformLocation(program, 'mProj')
+    const matRotateUniformLocation = gl.getUniformLocation(program, 'mRotate')
+    const matRotateTimeUniformLocation = gl.getUniformLocation(
+        program,
+        'mRotateTime'
+    )
     const matViewUniformLocationLine = gl.getUniformLocation(
         lineProgram,
         'mView'
@@ -75,12 +85,33 @@ export default (
         lineProgram,
         'mProj'
     )
+    const matRotateUniformLocationLine = gl.getUniformLocation(
+        lineProgram,
+        'mRotate'
+    )
+    const matRotateTimeUniformLocationLine = gl.getUniformLocation(
+        lineProgram,
+        'mRotateTime'
+    )
     const fovUniformLocation = gl.getUniformLocation(program, 'fov')
     const screenUniformLocation = gl.getUniformLocation(program, 'screen')
 
-    gl.useProgram(program)
+    const identity = new Float32Array(16)
     const viewMatrix = new Float32Array(16)
     const projMatrix = new Float32Array(16)
+    const latitudeRotateMatrix = new Float32Array(16)
+    const timeRotateMatrix = new Float32Array(16)
+
+    mat4.identity(identity)
+    mat4.rotateZ(latitudeRotateMatrix, identity, -latitudeRadians)
+    gl.useProgram(program)
+    gl.uniformMatrix4fv(matRotateUniformLocation, false, latitudeRotateMatrix)
+    gl.useProgram(lineProgram)
+    gl.uniformMatrix4fv(
+        matRotateUniformLocationLine,
+        false,
+        latitudeRotateMatrix
+    )
 
     const projectedVerticesBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, projectedVerticesBuffer)
@@ -93,6 +124,8 @@ export default (
 
     const update = () => {
         fov = zoomFactor ** zoom * 45
+        const siderealAngle =
+            sidereal(Date.now(), longitude) * Math.PI * 2 - Math.PI
 
         mat4.lookAt(
             viewMatrix,
@@ -107,6 +140,7 @@ export default (
             0.1,
             1000.0
         )
+        mat4.rotateY(timeRotateMatrix, identity, siderealAngle)
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
@@ -116,6 +150,11 @@ export default (
 
             gl.uniformMatrix4fv(matViewUniformLocationLine, false, viewMatrix)
             gl.uniformMatrix4fv(matProjUniformLocationLine, false, projMatrix)
+            gl.uniformMatrix4fv(
+                matRotateTimeUniformLocationLine,
+                false,
+                timeRotateMatrix
+            )
 
             gl.drawElements(gl.LINES, lines.length, gl.UNSIGNED_INT, 0)
         }
@@ -124,6 +163,11 @@ export default (
 
         gl.uniformMatrix4fv(matViewUniformLocation, false, viewMatrix)
         gl.uniformMatrix4fv(matProjUniformLocation, false, projMatrix)
+        gl.uniformMatrix4fv(
+            matRotateTimeUniformLocation,
+            false,
+            timeRotateMatrix
+        )
         gl.uniform1f(fovUniformLocation, fov)
         gl.uniform2f(screenUniformLocation, canvas.width, canvas.height)
 
@@ -243,29 +287,29 @@ const setStarsVertexPointer = (gl, program, vertexSize) => {
     )
     gl.enableVertexAttribArray(magnitudeAttribLocation)
 
-    const colorAttribLotation = gl.getAttribLocation(program, 'color')
+    const colorAttribLocation = gl.getAttribLocation(program, 'color')
     gl.vertexAttribPointer(
-        colorAttribLotation,
+        colorAttribLocation,
         3,
         gl.FLOAT,
         false,
         vertexSize * Float32Array.BYTES_PER_ELEMENT,
         4 * Float32Array.BYTES_PER_ELEMENT
     )
-    gl.enableVertexAttribArray(colorAttribLotation)
+    gl.enableVertexAttribArray(colorAttribLocation)
 }
 
 const setLineVertexPointer = (gl, program, vertexSize) => {
-    const positionAttribLotation = gl.getAttribLocation(program, 'vertPosition')
+    const positionAttribLocation = gl.getAttribLocation(program, 'vertPosition')
     gl.vertexAttribPointer(
-        positionAttribLotation,
+        positionAttribLocation,
         3,
         gl.FLOAT,
         false,
         vertexSize * Float32Array.BYTES_PER_ELEMENT,
         0
     )
-    gl.enableVertexAttribArray(positionAttribLotation)
+    gl.enableVertexAttribArray(positionAttribLocation)
 }
 
 const createProgram = (
@@ -342,6 +386,8 @@ attribute vec3 color;
 uniform float fov;
 uniform mat4 mView;
 uniform mat4 mProj;
+uniform mat4 mRotate;
+uniform mat4 mRotateTime;
 
 varying vec3 fragColor;
 varying float size;
@@ -351,7 +397,7 @@ float glowSize = 7.0/5.0;
 
 void main()
 {   
-    vec4 projected = mProj * mView * vec4(vertPosition, 1.0);
+    vec4 projected = mProj * mView * mRotate * mRotateTime * vec4(vertPosition, 1.0);
     size = (pow(1.5, -magnitude - 10.0) * 1000.0 * 45.0 / fov) * ((fov / 45.0 - 1.0) * 0.6 + 1.0) * min(fov, 1.0);
     gl_Position = projected;
     gl_PointSize = size * glowSize;
@@ -386,12 +432,14 @@ precision mediump float;
 attribute vec3 vertPosition;
 uniform mat4 mView;
 uniform mat4 mProj;
+uniform mat4 mRotate;
+uniform mat4 mRotateTime;
 
 float TAU = 6.283;
 
 void main()
 {   
-    gl_Position = mProj * mView * vec4(vertPosition, 1.0);
+    gl_Position = mProj * mView * mRotate * mRotateTime * vec4(vertPosition, 1.0);
 }`
 
 const lineFragmentShader = `

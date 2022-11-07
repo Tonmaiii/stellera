@@ -3,6 +3,7 @@
     import Loader from './game/Loader.svelte'
     import Home from './Home.svelte'
     import './util/data'
+    import './util/geolocation'
 </script>
 
 <Router

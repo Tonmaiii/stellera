@@ -5,6 +5,7 @@
     import constellationNames from '../util/constellationNames'
     import type { star } from '../util/types'
     import shuffle from '../util/shuffle'
+    import { location } from '../util/geolocation'
 
     export let params
     const gameCode = BigInt(params.gameCode)
@@ -56,12 +57,16 @@
             {#await data}
                 Loading Stars Data...
             {:then value}
-                <button
-                    on:click={() => {
-                        starData = value
-                        startGame = true
-                    }}>Start</button
-                >
+                {#if location}
+                    <button
+                        on:click={() => {
+                            starData = value
+                            startGame = true
+                        }}>Start</button
+                    >
+                {:else}
+                    Loading Location...
+                {/if}
             {/await}
             <br />
             <br />
@@ -92,6 +97,8 @@
             constellationship={starData[3]}
             {useDesignation}
             {showConstellation}
+            latitude={location.latitude}
+            longitude={location.longitude}
         />
     {/if}
 {:else}

@@ -2,9 +2,9 @@
     import Topbar from './Topbar.svelte'
 
     import { onMount } from 'svelte'
-    import data from '../util/data'
     import engine, { reset } from './engine'
     import type { star } from '../util/types'
+    import sidereal from '../util/sidereal'
 
     export let stars: star[]
     export let starsIndexed: { [key: string]: star }
@@ -13,6 +13,9 @@
 
     export let useDesignation: boolean
     export let showConstellation: boolean
+
+    export let latitude: number
+    export let longitude: number
 
     let canvas: HTMLCanvasElement
     let overlay: HTMLCanvasElement
@@ -203,7 +206,9 @@
             lines,
             starScreenPos,
             showConstellation,
-            fov => updateOverlay(ctx, fov)
+            fov => updateOverlay(ctx, fov),
+            latitude,
+            longitude
         )
 
         const ctx = overlay.getContext('2d')
