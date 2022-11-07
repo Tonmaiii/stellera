@@ -156,5 +156,6 @@
         padding: 1rem;
         border-radius: 1rem;
         text-decoration: none;
+        color: #0b44ff;
     }
 </style>

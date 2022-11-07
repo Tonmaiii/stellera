@@ -3,7 +3,7 @@
 
     import { onMount } from 'svelte'
     import data from '../util/data'
-    import engine from './engine'
+    import engine, { reset } from './engine'
     import type { star } from '../util/types'
 
     export let stars: star[]
@@ -27,6 +27,8 @@
 
     const rounds = answers.length
 
+    let completed = false
+
     let round = 0
     let tries = 0
 
@@ -34,6 +36,16 @@
     let correctClicks = 0
 
     let starLabels = Array<{ hic: string; frame: number; correct: boolean }>()
+
+    const resetGame = () => {
+        completed = false
+        round = 0
+        tries = 0
+        wrongClicks = 0
+        correctClicks = 0
+        starLabels = Array<{ hic: string; frame: number; correct: boolean }>()
+        reset()
+    }
 
     const updateOverlay = (ctx: CanvasRenderingContext2D, fov: number) => {
         if (starLabels.length === 0 && tries < 3) {
@@ -57,6 +69,9 @@
         correctClicks++
         starLabels.push({ hic, frame: 0, correct: true })
         flashFrame = 0
+        if (round >= rounds) {
+            completed = true
+        }
     }
 
     const wrong = (hic: string) => {
@@ -106,11 +121,15 @@
             )
 
             ctx.translate(overlay.width / 2, overlay.height / 2)
-            ctx.rotate(angle)
+            ctx.rotate(angle - Math.PI / 2)
+            ctx.translate(0, distance - 20)
             ctx.beginPath()
-            ctx.arc(distance, 0, 50, 0, Math.PI * 2)
-            ctx.fillStyle = '#ff0000'
-            ctx.fill()
+            ctx.moveTo(-30, -50)
+            ctx.lineTo(0, 0)
+            ctx.lineTo(30, -50)
+            ctx.strokeStyle = '#ff0000'
+            ctx.lineWidth = 5
+            ctx.stroke()
             ctx.resetTransform()
         } else flashFrame = (flashFrame + 1) % 60
     }
@@ -210,19 +229,65 @@
     on:mouseup={handleClick}
 />
 
-<Topbar
-    name={useDesignation
-        ? starsIndexed[answers[round]].designation_name
-        : starsIndexed[answers[round]].display_name}
-    percentage={correctClicks + wrongClicks === 0
-        ? 0
-        : Math.round((100 * correctClicks) / (correctClicks + wrongClicks))}
-/>
+{#if !completed}
+    <Topbar
+        name={useDesignation
+            ? starsIndexed[answers[round]].designation_name
+            : starsIndexed[answers[round]].display_name}
+        percentage={correctClicks + wrongClicks === 0
+            ? 0
+            : Math.round((100 * correctClicks) / (correctClicks + wrongClicks))}
+    />
+{:else}
+    <div class="container">
+        <div class="result">
+            <h1>Result</h1>
+            <h2>
+                {Math.round(
+                    (100 * correctClicks) / (correctClicks + wrongClicks)
+                )}%
+            </h2>
+            <div>
+                <button on:click={resetGame}>Play Again</button>
+                <button
+                    on:click={() => {
+                        location.hash = ''
+                    }}>Exit</button
+                >
+            </div>
+        </div>
+    </div>
+{/if}
 
 <style>
     canvas {
         position: fixed;
         width: 100%;
         height: 100%;
+    }
+
+    div.container {
+        position: absolute;
+        color: white;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    h1,
+    h2 {
+        margin: 0;
+    }
+
+    button {
+        font-size: 1rem;
+    }
+
+    div.result {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 </style>

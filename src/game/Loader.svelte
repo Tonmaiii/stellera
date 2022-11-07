@@ -54,7 +54,7 @@
     {#if !startGame}
         <main>
             {#await data}
-                Loading Stars Data
+                Loading Stars Data...
             {:then value}
                 <button
                     on:click={() => {
@@ -97,3 +97,9 @@
 {:else}
     Invalid Game Code
 {/if}
+
+<style>
+    button {
+        font-size: 4rem;
+    }
+</style>

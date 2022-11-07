@@ -6,7 +6,7 @@
 
 <div class="container">
     <div class="item">{percentage}%</div>
-    <div class="item">{time}</div>
+    <!-- <div class="item">{time}</div> -->
     <div class="item">{name}</div>
 </div>
 

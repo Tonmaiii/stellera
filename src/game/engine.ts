@@ -1,6 +1,26 @@
 import { mat4, glMatrix } from 'gl-matrix'
 import type { star } from '../util/types'
 
+let mouseX = 0
+let mouseY = 0
+let ra = 0
+let dec = 0
+let fov = 45
+let zoom = 0
+const zoomFactor = 1.001
+const sensitivity = 0.0015
+let zooming = false
+let zoomDistance = 0
+
+export const reset = () => {
+    ra = 0
+    dec = 0
+    fov = 45
+    zoom = 0
+    zooming = false
+    zoomDistance = 0
+}
+
 export default (
     gl: WebGL2RenderingContext,
     canvas: HTMLCanvasElement,
@@ -70,15 +90,6 @@ export default (
         gl.DYNAMIC_READ
     )
     gl.bindBuffer(gl.ARRAY_BUFFER, null)
-
-    let mouseX = 0
-    let mouseY = 0
-    let ra = 0
-    let dec = 0
-    let fov = 0
-    let zoom = 0
-    const zoomFactor = 1.001
-    const sensitivity = 0.0015
 
     const update = () => {
         fov = zoomFactor ** zoom * 45
@@ -165,8 +176,6 @@ export default (
         mouseY = e.touches[0].clientY
     })
 
-    let zooming = false
-    let zoomDistance = 0
     document.addEventListener(
         'touchmove',
         e => {
