@@ -53,20 +53,23 @@
         resetTimer()
     }
 
-    const updateOverlay = (ctx: CanvasRenderingContext2D, fov: number) => {
-        if (starLabels.length === 0 && tries < 3) {
-            return
-        }
-
+    const updateOverlay = (
+        ctx: CanvasRenderingContext2D,
+        fov: number,
+        ra: number
+    ) => {
         ctx.clearRect(0, 0, overlay.width, overlay.height)
-
-        if (tries >= 3) flashStar(ctx, starsIndexed[answers[round]], fov)
 
         starLabels = starLabels.filter(({ frame }) => frame < 60)
         starLabels.forEach(label => {
             drawStarLabel(ctx, label, fov)
             label.frame++
         })
+
+        if (tries >= 3) flashStar(ctx, starsIndexed[answers[round]], fov)
+        ctx.translate(40, 80)
+        drawCompass(ctx, ra)
+        ctx.resetTransform()
     }
 
     const correct = (hic: string) => {
@@ -85,6 +88,30 @@
         tries++
         wrongClicks++
         starLabels.push({ hic, frame: 0, correct: false })
+    }
+
+    const drawCompass = (ctx: CanvasRenderingContext2D, ra: number) => {
+        ctx.beginPath()
+        ctx.arc(0, 0, 20, 0, Math.PI * 2)
+        ctx.fillStyle = '#ffffffb0'
+        ctx.fill()
+        ctx.rotate(-ra)
+
+        ctx.beginPath()
+        ctx.moveTo(-4, 0)
+        ctx.lineTo(0, -20)
+        ctx.lineTo(4, 0)
+        ctx.fillStyle = '#ff0000'
+        ctx.fill()
+
+        ctx.beginPath()
+        ctx.moveTo(-4, 0)
+        ctx.lineTo(0, 20)
+        ctx.lineTo(4, 0)
+        ctx.fillStyle = '#ffffff'
+        ctx.fill()
+
+        ctx.setTransform(1, 0, 0, 1, 0, 0)
     }
 
     let flashFrame = 0
@@ -160,11 +187,26 @@
         ctx.fillStyle = `rgba(${
             label.correct ? '255, 255, 255' : '255, 0, 0'
         }, ${alpha}`
-        ctx.fillText(
-            useDesignation ? star.designation_name : star.display_name,
-            x,
-            y + (size / 2) * (7 / 5) + 16
-        )
+        if (useDesignation) {
+            ctx.fillText(
+                star.designation_name,
+                x,
+                y + (size / 2) * (7 / 5) + 16
+            )
+        } else {
+            ctx.fillText(star.display_name, x, y + (size / 2) * (7 / 5) + 16)
+            if (
+                label.correct &&
+                star.display_name !== star.designation_name &&
+                star.designation_name
+            ) {
+                ctx.fillText(
+                    star.designation_name,
+                    x,
+                    y + (size / 2) * (7 / 5) + 36
+                )
+            }
+        }
     }
 
     let click = false
@@ -212,7 +254,7 @@
             lines,
             starScreenPos,
             showConstellation,
-            fov => updateOverlay(ctx, fov),
+            (fov, ra) => updateOverlay(ctx, fov, ra),
             latitude,
             longitude
         )

@@ -29,7 +29,7 @@ export default (
     lines: number[],
     data: Float32Array,
     drawLines: boolean,
-    callback: (fov: number) => void,
+    callback: (fov: number, ra: number) => void,
     latitude: number,
     longitude: number
 ) => {
@@ -182,7 +182,7 @@ export default (
 
         gl.bindBuffer(gl.TRANSFORM_FEEDBACK_BUFFER, projectedVerticesBuffer)
         gl.getBufferSubData(gl.TRANSFORM_FEEDBACK_BUFFER, 0, data)
-        callback(fov)
+        callback(fov, ra)
         requestAnimationFrame(update)
     }
     requestAnimationFrame(update)
