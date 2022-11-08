@@ -1,7 +1,7 @@
 <script lang="ts">
     import Topbar from './Topbar.svelte'
 
-    import { onMount } from 'svelte'
+    import { createEventDispatcher, onMount } from 'svelte'
     import engine, { reset } from './engine'
     import type { star } from '../util/types'
     import shuffle from '../util/shuffle'
@@ -41,6 +41,8 @@
 
     let starLabels = Array<{ hic: string; frame: number; correct: boolean }>()
 
+    const dispatch = createEventDispatcher()
+
     const resetGame = () => {
         completed = false
         round = 0
@@ -67,7 +69,7 @@
         })
 
         if (tries >= 3) flashStar(ctx, starsIndexed[answers[round]], fov)
-        ctx.translate(40, 80)
+        ctx.translate(40, overlay.height - 40)
         drawCompass(ctx, ra)
         ctx.resetTransform()
     }
@@ -92,22 +94,22 @@
 
     const drawCompass = (ctx: CanvasRenderingContext2D, ra: number) => {
         ctx.beginPath()
-        ctx.arc(0, 0, 20, 0, Math.PI * 2)
+        ctx.arc(0, 0, 30, 0, Math.PI * 2)
         ctx.fillStyle = '#ffffffb0'
         ctx.fill()
         ctx.rotate(-ra)
 
         ctx.beginPath()
-        ctx.moveTo(-4, 0)
-        ctx.lineTo(0, -20)
-        ctx.lineTo(4, 0)
+        ctx.moveTo(-6, 0)
+        ctx.lineTo(0, -30)
+        ctx.lineTo(6, 0)
         ctx.fillStyle = '#ff0000'
         ctx.fill()
 
         ctx.beginPath()
-        ctx.moveTo(-4, 0)
-        ctx.lineTo(0, 20)
-        ctx.lineTo(4, 0)
+        ctx.moveTo(-6, 0)
+        ctx.lineTo(0, 30)
+        ctx.lineTo(6, 0)
         ctx.fillStyle = '#ffffff'
         ctx.fill()
 
@@ -293,6 +295,9 @@
         completed={round}
         total={rounds}
     />
+    <button on:click={() => dispatch('exit')}>
+        <i class="fas fa-angle-left" />
+    </button>
 {:else}
     <div class="container">
         <div class="result">
@@ -307,11 +312,7 @@
             </div>
             <div>
                 <button on:click={resetGame}>Play Again</button>
-                <button
-                    on:click={() => {
-                        location.hash = ''
-                    }}>Exit</button
-                >
+                <button on:click={() => dispatch('exit')}>Exit</button>
             </div>
         </div>
     </div>
@@ -341,7 +342,15 @@
     }
 
     button {
-        font-size: 1rem;
+        position: absolute;
+        width: 3rem;
+        height: 3rem;
+        background-color: transparent;
+        border: none;
+        margin: 0.5rem;
+        color: white;
+        font-size: 2rem;
+        padding: 0;
     }
 
     div.result {

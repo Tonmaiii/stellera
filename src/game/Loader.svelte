@@ -66,11 +66,13 @@
 {#if validGameCode}
     {#if !startGame}
         <main>
+            <a href="/">back</a><br />
             {#await data}
                 Loading Stars Data...
             {:then value}
                 {#if $location}
                     <button
+                        class="start"
                         on:click={() => {
                             starData = value
                             startGame = true
@@ -132,6 +134,7 @@
             {showConstellation}
             {latitude}
             {longitude}
+            on:exit={() => (startGame = false)}
         />
     {/if}
 {:else}

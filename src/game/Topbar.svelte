@@ -7,9 +7,7 @@
     export let total: number
 </script>
 
-<div class="container">
-    <div class="item">{name}</div>
-</div>
+<div class="name">{name}</div>
 
 <div class="container right">
     <div class="item">{formatTime($timer)}</div>
@@ -24,10 +22,16 @@
         font-size: 2rem;
         color: white;
         margin: 0.5rem;
+        right: 0;
     }
 
-    .right {
-        right: 0;
+    .name {
+        position: absolute;
+        font-size: 2rem;
+        color: white;
+        margin-top: 0.5rem;
+        width: 100%;
+        text-align: center;
     }
 
     .item {
