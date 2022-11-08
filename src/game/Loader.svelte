@@ -48,6 +48,19 @@
             )
             .map(star => star.HIC)
     let starData
+
+    $: latitude = Number.isFinite(numberLatitude)
+        ? numberLatitude
+        : $location?.latitude ?? 0
+    $: longitude = Number.isFinite(numberLongitude)
+        ? numberLongitude
+        : $location?.longitude ?? new Date().getTimezoneOffset() / -4
+
+    let inputLatitude: string
+    let inputLongitude: string
+
+    $: numberLatitude = parseFloat(inputLatitude)
+    $: numberLongitude = parseFloat(inputLongitude)
 </script>
 
 {#if validGameCode}
@@ -73,8 +86,23 @@
             Game Settings <br />
             <br />
             {#if $location}
-                Latitude: {$location.latitude}<br />
-                Longitude: {$location.longitude}<br />
+                {#if $location.latitude === null}
+                    <strong
+                        >Allow browser to access location for real time stars</strong
+                    ><br />
+                {/if}
+                Latitude:
+                <input
+                    type="text"
+                    placeholder={`${latitude}`}
+                    bind:value={inputLatitude}
+                /><br />
+                Longitude:
+                <input
+                    type="text"
+                    placeholder={`${longitude}`}
+                    bind:value={inputLongitude}
+                /><br />
                 Time: realtime<br />
                 <br />
             {/if}
@@ -102,8 +130,8 @@
             constellationship={starData[3]}
             {useDesignation}
             {showConstellation}
-            latitude={$location.latitude}
-            longitude={$location.longitude}
+            {latitude}
+            {longitude}
         />
     {/if}
 {:else}

@@ -11,9 +11,9 @@ if (navigator.geolocation) {
             })
         },
         () => {
-            location.set({ latitude: 0, longitude: 0 })
+            location.set({ latitude: null, longitude: null })
         }
     )
 } else {
-    location.set({ latitude: 0, longitude: 0 })
+    location.set({ latitude: null, longitude: null })
 }
