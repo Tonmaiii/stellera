@@ -125,7 +125,7 @@ export default (
     const update = () => {
         fov = zoomFactor ** zoom * 45
         const siderealAngle =
-            sidereal(Date.now(), longitude) * Math.PI * 2 - Math.PI
+            sidereal(Date.now(), longitude) * -Math.PI * 2 + Math.PI
 
         mat4.lookAt(
             viewMatrix,
