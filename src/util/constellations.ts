@@ -442,7 +442,100 @@ const constellations = [
 ]
 export default constellations
 
-export const abbreviations = constellations.map(
-    ({ abbreviation }) => abbreviation
-)
-export const names = constellations.map(({ name }) => name)
+export const circumpolarNorth = ['Cas', 'Cep', 'Dra', 'UMa', 'UMi']
+export const circumpolarSouth = ['Car', 'Cen', 'Cru']
+export const zodiac = [
+    'Ari',
+    'Tau',
+    'Gem',
+    'Cnc',
+    'Leo',
+    'Vir',
+    'Lib',
+    'Sco',
+    'Sgr',
+    'Cap',
+    'Aqr',
+    'Psc'
+]
+export const northernHemisphere = [
+    'And',
+    'Ari',
+    'Cas',
+    'Ori',
+    'Per',
+    'Psc',
+    'Tau',
+    'Tri',
+    'Aur',
+    'Cam',
+    'Cnc',
+    'CMi',
+    'Gem',
+    'Leo',
+    'LMi',
+    'Lyn',
+    'Mon',
+    'UMa',
+    'Boo',
+    'CVn',
+    'Com',
+    'CrB',
+    'Dra',
+    'Her',
+    'Ser',
+    'UMi',
+    'Aql',
+    'Cep',
+    'Cyg',
+    'Del',
+    'Equ',
+    'Lac',
+    'Lyr',
+    'Peg',
+    'Sge',
+    'Vul'
+]
+export const southernHemisphere = constellations
+    .filter(
+        ({ abbreviation }) =>
+            ![
+                'And',
+                'Ari',
+                'Cas',
+                'Ori',
+                'Per',
+                'Psc',
+                'Tau',
+                'Tri',
+                'Aur',
+                'Cam',
+                'Cnc',
+                'CMi',
+                'Gem',
+                'Leo',
+                'LMi',
+                'Lyn',
+                'Mon',
+                'UMa',
+                'Boo',
+                'CVn',
+                'Com',
+                'CrB',
+                'Dra',
+                'Her',
+                'Ser',
+                'UMi',
+                'Aql',
+                'Cep',
+                'Cyg',
+                'Del',
+                'Equ',
+                'Lac',
+                'Lyr',
+                'Peg',
+                'Sge',
+                'Vul'
+            ].includes(abbreviation)
+    )
+    .map(({ abbreviation }) => abbreviation)

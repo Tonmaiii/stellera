@@ -1,6 +1,12 @@
 <script lang="ts">
     import Toggle from './components/Toggle.svelte'
-    import constellations from './util/constellationNames'
+    import constellations, {
+        circumpolarNorth,
+        circumpolarSouth,
+        northernHemisphere,
+        southernHemisphere,
+        zodiac
+    } from './util/constellations'
     import greekLetters from './util/greekLetters'
 
     let includeAllConstellations = true
@@ -11,7 +17,9 @@
 
     let starWithName = false
 
-    const includedConstellation = Array(constellations.length).fill(false)
+    let includedConstellation = Array<boolean>(constellations.length).fill(
+        false
+    )
     const identifiers = Array(greekLetters.length)
         .fill(false)
         .map((_, i) => i < 1)
@@ -36,6 +44,20 @@
             0n
         ) <<
             (3n + BigInt(constellations.length)))
+
+    const selectAll = () => {
+        includedConstellation = Array(constellations.length).fill(true)
+    }
+
+    const deselectAll = () => {
+        includedConstellation = Array(constellations.length).fill(false)
+    }
+
+    const select = (con: string[]) => {
+        includedConstellation = includedConstellation.map(
+            (b, i) => b || con.includes(constellations[i].abbreviation)
+        )
+    }
 </script>
 
 <main>
@@ -61,7 +83,7 @@
             >
         </div>
     </div>
-    <div class="section">
+    <div class="section constellation">
         <h1>Include Constellations</h1>
         <div class="select">
             <div><strong>Include all constellations</strong></div>
@@ -69,6 +91,23 @@
         </div>
 
         {#if !includeAllConstellations}
+            <div>
+                <button on:click={selectAll}>Select All</button>
+                <button on:click={deselectAll}>Deselect All</button>
+                <button on:click={() => select(zodiac)}>Zodiac</button>
+                <button on:click={() => select(circumpolarNorth)}
+                    >Northern Circumpolar</button
+                >
+                <button on:click={() => select(circumpolarSouth)}
+                    >Southern Circumpolar</button
+                >
+                <button on:click={() => select(northernHemisphere)}
+                    >Northern Hemisphere</button
+                >
+                <button on:click={() => select(southernHemisphere)}
+                    >Southern Hemisphere</button
+                >
+            </div>
             <div class="grid">
                 {#each constellations as { abbreviation, name }, i}
                     <div>{name}</div>
@@ -95,7 +134,12 @@
                     <Toggle bind:checked={identifiers[i]} />
                 {/each}
             </div>
-            <button on:click={() => (showAllDesignations = true)}>More</button>
+            <div>
+                <button
+                    class="more"
+                    on:click={() => (showAllDesignations = true)}>More</button
+                >
+            </div>
         {:else}
             <div class="grid">
                 {#each greekLetters as { name }, i}
@@ -131,6 +175,10 @@
         flex-direction: column;
     }
 
+    .constellation {
+        flex: 1.5;
+    }
+
     .select {
         display: flex;
         margin-bottom: 1rem;
@@ -157,5 +205,19 @@
         border-radius: 1rem;
         text-decoration: none;
         color: #0b44ff;
+    }
+
+    button {
+        font-size: 1rem;
+        text-align: left;
+        border: none;
+        border-radius: 1rem;
+        padding: 0.5rem;
+        margin: 0.25rem;
+        color: black;
+    }
+
+    .more {
+        margin: 0;
     }
 </style>

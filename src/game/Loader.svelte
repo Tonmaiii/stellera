@@ -2,7 +2,7 @@
     import Game from './Game.svelte'
     import data from '../util/data'
     import greekLetters from '../util/greekLetters'
-    import constellationNames from '../util/constellationNames'
+    import constellationNames from '../util/constellations'
     import type { star } from '../util/types'
     import { location } from '../util/geolocation'
 
