@@ -299,7 +299,7 @@
         completed={round}
         total={rounds}
     />
-    <button on:click={() => dispatch('exit')}>
+    <button class="back" on:click={() => dispatch('exit')}>
         <i class="fas fa-angle-left" />
     </button>
 {:else}
@@ -344,8 +344,11 @@
         margin: 0.25rem;
         display: inline;
     }
-
     button {
+        font-size: 1rem;
+    }
+
+    .back {
         position: absolute;
         width: 3rem;
         height: 3rem;
