@@ -189,16 +189,10 @@
         ctx.fillStyle = `rgba(${
             label.correct ? '255, 255, 255' : '255, 0, 0'
         }, ${alpha}`
-        if (useDesignation) {
-            ctx.fillText(
-                star.designation_name,
-                x,
-                y + (size / 2) * (7 / 5) + 16
-            )
-        } else {
+
+        if (label.correct) {
             ctx.fillText(star.display_name, x, y + (size / 2) * (7 / 5) + 16)
             if (
-                label.correct &&
                 star.display_name !== star.designation_name &&
                 star.designation_name
             ) {
@@ -208,6 +202,16 @@
                     y + (size / 2) * (7 / 5) + 36
                 )
             }
+        }
+
+        if (useDesignation) {
+            ctx.fillText(
+                star.designation_name,
+                x,
+                y + (size / 2) * (7 / 5) + 16
+            )
+        } else {
+            ctx.fillText(star.display_name, x, y + (size / 2) * (7 / 5) + 16)
         }
     }
 
