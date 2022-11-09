@@ -12,6 +12,7 @@ const zoomFactor = 1.001
 const sensitivity = 0.0015
 let zooming = false
 let zoomDistance = 0
+let playing = true
 
 export const reset = () => {
     ra = 0
@@ -20,6 +21,11 @@ export const reset = () => {
     zoom = 0
     zooming = false
     zoomDistance = 0
+    playing = true
+}
+
+export const exit = () => {
+    playing = false
 }
 
 export default (
@@ -123,6 +129,7 @@ export default (
     gl.bindBuffer(gl.ARRAY_BUFFER, null)
 
     const update = () => {
+        if (!playing) return
         fov = zoomFactor ** zoom * 45
         const siderealAngle =
             sidereal(Date.now(), longitude) * -Math.PI * 2 + Math.PI

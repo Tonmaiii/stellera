@@ -16,6 +16,10 @@
 </div>
 
 <style>
+    div {
+        user-select: none;
+    }
+
     .container {
         position: absolute;
         display: flex;

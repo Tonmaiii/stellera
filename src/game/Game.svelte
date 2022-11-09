@@ -2,14 +2,13 @@
     import Topbar from './Topbar.svelte'
 
     import { createEventDispatcher, onMount } from 'svelte'
-    import engine, { reset } from './engine'
+    import engine, { reset, exit } from './engine'
     import type { star } from '../util/types'
     import shuffle from '../util/shuffle'
     import { formatTime, resetTimer, stopTimer, timer } from '../util/timer'
+    import data from '../util/data'
 
-    export let stars: star[]
-    export let starsIndexed: { [key: string]: star }
-    export let constellationship: { [key: string]: [string, string][] }
+    const { stars, starsIndexed, constellationship } = $data
     export let answers: string[]
 
     export let useDesignation: boolean
@@ -43,8 +42,15 @@
 
     const dispatch = createEventDispatcher()
 
+    let playing = true
+    const exitGame = () => {
+        exit()
+        dispatch('exit')
+    }
+
     const resetGame = () => {
         completed = false
+        playing = true
         round = 0
         tries = 0
         wrongClicks = 0
@@ -303,7 +309,7 @@
         completed={round}
         total={rounds}
     />
-    <button class="back" on:click={() => dispatch('exit')}>
+    <button class="back" on:click={exitGame}>
         <i class="fas fa-angle-left" />
     </button>
 {:else}
@@ -320,7 +326,7 @@
             </div>
             <div>
                 <button on:click={resetGame}>Play Again</button>
-                <button on:click={() => dispatch('exit')}>Exit</button>
+                <button on:click={exitGame}>Exit</button>
             </div>
         </div>
     </div>

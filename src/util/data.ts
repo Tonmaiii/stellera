@@ -1,23 +1,18 @@
+import { writable } from 'svelte/store'
 import type { star } from './types'
 
-export default Promise.all(
-    [
-        'stars',
-        'stars_indexed',
-        'names',
-        'constellationship'
-        // 'clickable_stars/stars',
-        // 'clickable_stars/stars_indexed'
-    ].map(async file => {
-        return await (await fetch(`data/${file}.json`)).json()
-    })
-) as Promise<
-    [
-        star[],
-        { [key: string]: star },
-        { [key: string]: string },
-        { [key: string]: [string, string][] }
-        // star[],
-        // { [key: string]: star }
-    ]
->
+const data = writable<{
+    stars: star[]
+    starsIndexed: { [key: string]: star }
+    constellationship: { [key: string]: [string, string][] }
+}>(null)
+
+export default data
+;(async () => {
+    const [stars, starsIndexed, constellationship] = await Promise.all(
+        ['stars', 'stars_indexed', 'constellationship'].map(async file => {
+            return await (await fetch(`data/${file}.json`)).json()
+        })
+    )
+    data.set({ stars, starsIndexed, constellationship })
+})()
