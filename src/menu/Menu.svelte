@@ -85,10 +85,10 @@
                     bind:value={inputLongitude}
                 />
             </div>
-            <div class="grid">
+            <!-- <div class="grid">
                 <div>Use device orientation</div>
                 <input type="checkbox" bind:checked={useDeviceOrientation} />
-            </div>
+            </div> -->
             <div class="start">
                 {#if $data && $geolocation}
                     <button on:click={() => (startGame = true)}>Start</button>
