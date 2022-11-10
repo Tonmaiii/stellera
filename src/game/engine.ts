@@ -278,7 +278,7 @@ document.addEventListener('touchend', e => {
 
 window.addEventListener('deviceorientation', e => {
     ra = (-e.alpha * Math.PI) / 180
-    dec = (-e.gamma * Math.PI) / 180
+    dec = ((-e.gamma - 90) * Math.PI) / 180
     rotate = (e.beta * Math.PI) / 180
 })
 
