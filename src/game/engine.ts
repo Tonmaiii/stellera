@@ -278,8 +278,8 @@ document.addEventListener('touchend', e => {
 
 window.addEventListener('deviceorientation', e => {
     ra = (e.alpha * Math.PI) / 180
-    dec = ((e.gamma - 90) * Math.PI) / 180
-    rotate = (-e.beta * Math.PI) / 180
+    dec = ((Math.abs(e.gamma) - 90) * Math.PI) / 180
+    rotate = (e.beta * Math.PI) / 180
 })
 
 const setStarsVertexPointer = (gl, program, vertexSize) => {
