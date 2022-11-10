@@ -7,6 +7,7 @@
     import Game from '../game/Game.svelte'
     import data from '../util/data'
     import { location as geolocation } from '../util/geolocation'
+    import { requestDeviceOrientation } from '../util/deviceOrientation'
 
     export let params: { gameCode: string }
     let gameCode: bigint
@@ -52,6 +53,12 @@
         : $geolocation?.longitude ?? new Date().getTimezoneOffset() / -4
 
     let startGame = false
+
+    let useDeviceOrientation = false
+
+    $: if (useDeviceOrientation) {
+        requestDeviceOrientation()
+    }
 </script>
 
 {#if !startGame}
@@ -78,6 +85,10 @@
                     bind:value={inputLongitude}
                 />
             </div>
+            <div class="grid">
+                <div>Use device orientation</div>
+                <input type="checkbox" bind:checked={useDeviceOrientation} />
+            </div>
             <div class="start">
                 {#if $data && $geolocation}
                     <button on:click={() => (startGame = true)}>Start</button>
@@ -101,6 +112,7 @@
         {showConstellation}
         {latitude}
         {longitude}
+        {useDeviceOrientation}
         on:exit={() => (startGame = false)}
     />
 {/if}

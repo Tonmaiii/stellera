@@ -6,6 +6,7 @@ let mouseX = 0
 let mouseY = 0
 let ra = 0
 let dec = 0
+let rotate = 0
 let fov = 45
 let zoom = 0
 const zoomFactor = 1.001
@@ -13,10 +14,12 @@ const sensitivity = 0.0015
 let zooming = false
 let zoomDistance = 0
 let playing = true
+let useDeviceOrientation = false
 
 export const reset = () => {
     ra = 0
     dec = 0
+    rotate = 0
     fov = 45
     zoom = 0
     zooming = false
@@ -37,9 +40,11 @@ export default (
     drawLines: boolean,
     callback: (fov: number, ra: number) => void,
     latitude: number,
-    longitude: number
+    longitude: number,
+    deviceOrientation: boolean
 ) => {
     const latitudeRadians = ((-latitude + 90) / 180) * Math.PI
+    useDeviceOrientation = deviceOrientation
 
     gl.clearColor(0, 0, 0, 1)
     gl.enable(gl.BLEND)
@@ -147,6 +152,7 @@ export default (
             0.1,
             1000.0
         )
+        mat4.rotateZ(projMatrix, projMatrix, rotate)
         mat4.rotateY(timeRotateMatrix, identity, siderealAngle)
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
@@ -200,76 +206,81 @@ export default (
         canvas.width = canvas.clientWidth
         canvas.height = canvas.clientHeight
     })
+}
+let deltaX = 0
+let deltaY = 0
+document.addEventListener('mousemove', e => {
+    if (!useDeviceOrientation && e.buttons & 1) {
+        deltaX = e.clientX - mouseX
+        deltaY = e.clientY - mouseY
+        ra -= deltaX * sensitivity * zoomFactor ** zoom
+        dec += deltaY * sensitivity * zoomFactor ** zoom
+        dec = Math.min(Math.PI / 2, dec)
+        dec = Math.max(-Math.PI / 2, dec)
+    }
 
-    let deltaX = 0
-    let deltaY = 0
-    document.addEventListener('mousemove', e => {
-        if (e.buttons & 1) {
-            deltaX = e.clientX - mouseX
-            deltaY = e.clientY - mouseY
+    mouseX = e.clientX
+    mouseY = e.clientY
+})
+
+document.addEventListener('wheel', e => {
+    zoom += e.deltaY
+    zoom = Math.min(Math.max(zoom, -8000), 500)
+})
+
+document.addEventListener('touchstart', e => {
+    mouseX = e.touches[0].clientX
+    mouseY = e.touches[0].clientY
+})
+
+document.addEventListener(
+    'touchmove',
+    e => {
+        e.preventDefault()
+        if (e.touches.length === 1 && !zooming && !useDeviceOrientation) {
+            deltaX = e.touches[0].clientX - mouseX
+            deltaY = e.touches[0].clientY - mouseY
             ra -= deltaX * sensitivity * zoomFactor ** zoom
             dec += deltaY * sensitivity * zoomFactor ** zoom
             dec = Math.min(Math.PI / 2, dec)
             dec = Math.max(-Math.PI / 2, dec)
+
+            mouseX = e.touches[0].clientX
+            mouseY = e.touches[0].clientY
         }
+        if (e.touches.length === 2) {
+            const touch1 = e.touches[0]
+            const touch2 = e.touches[1]
 
-        mouseX = e.clientX
-        mouseY = e.clientY
-    })
-
-    document.addEventListener('wheel', e => {
-        zoom += e.deltaY
-        zoom = Math.min(Math.max(zoom, -8000), 500)
-    })
-
-    document.addEventListener('touchstart', e => {
-        mouseX = e.touches[0].clientX
-        mouseY = e.touches[0].clientY
-    })
-
-    document.addEventListener(
-        'touchmove',
-        e => {
-            e.preventDefault()
-            if (e.touches.length === 1 && !zooming) {
-                deltaX = e.touches[0].clientX - mouseX
-                deltaY = e.touches[0].clientY - mouseY
-                ra -= deltaX * sensitivity * zoomFactor ** zoom
-                dec += deltaY * sensitivity * zoomFactor ** zoom
-                dec = Math.min(Math.PI / 2, dec)
-                dec = Math.max(-Math.PI / 2, dec)
-
-                mouseX = e.touches[0].clientX
-                mouseY = e.touches[0].clientY
-            }
-            if (e.touches.length === 2) {
-                const touch1 = e.touches[0]
-                const touch2 = e.touches[1]
-
-                const currentZoomDistance = Math.sqrt(
-                    (touch1.clientX - touch2.clientX) ** 2 +
-                        (touch1.clientY - touch2.clientY) ** 2
-                )
-                if (!zooming) {
-                    zooming = true
-                    zoomDistance = currentZoomDistance
-                    return
-                }
-
-                const deltaZoom = zoomDistance - currentZoomDistance
-                zoom += deltaZoom * 5
-                zoom = Math.min(Math.max(zoom, -8000), 500)
-
+            const currentZoomDistance = Math.sqrt(
+                (touch1.clientX - touch2.clientX) ** 2 +
+                    (touch1.clientY - touch2.clientY) ** 2
+            )
+            if (!zooming) {
+                zooming = true
                 zoomDistance = currentZoomDistance
+                return
             }
-        },
-        { passive: false }
-    )
 
-    document.addEventListener('touchend', e => {
-        if (e.touches.length === 0) zooming = false
-    })
-}
+            const deltaZoom = zoomDistance - currentZoomDistance
+            zoom += deltaZoom * 5
+            zoom = Math.min(Math.max(zoom, -8000), 500)
+
+            zoomDistance = currentZoomDistance
+        }
+    },
+    { passive: false }
+)
+
+document.addEventListener('touchend', e => {
+    if (e.touches.length === 0) zooming = false
+})
+
+window.addEventListener('deviceorientation', e => {
+    ra = (e.alpha * Math.PI) / 180
+    dec = ((e.gamma - 90) * Math.PI) / 180
+    rotate = (-e.beta * Math.PI) / 180
+})
 
 const setStarsVertexPointer = (gl, program, vertexSize) => {
     const positionAttribLocation = gl.getAttribLocation(program, 'vertPosition')

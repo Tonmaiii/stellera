@@ -17,6 +17,8 @@
     export let latitude: number
     export let longitude: number
 
+    export let useDeviceOrientation: boolean
+
     let canvas: HTMLCanvasElement
     let overlay: HTMLCanvasElement
 
@@ -272,7 +274,8 @@
             showConstellation,
             (fov, ra) => updateOverlay(ctx, fov, ra),
             latitude,
-            longitude
+            longitude,
+            useDeviceOrientation
         )
 
         const ctx = overlay.getContext('2d')
