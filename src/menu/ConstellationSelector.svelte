@@ -76,7 +76,6 @@
         margin: 1rem;
         display: flex;
         flex-direction: column;
-        height: 100%;
     }
 
     .select {

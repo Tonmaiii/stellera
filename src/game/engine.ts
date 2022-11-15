@@ -13,7 +13,7 @@ const zoomFactor = 1.001
 const sensitivity = 0.0015
 let zooming = false
 let zoomDistance = 0
-let playing = true
+let playing = false
 let useDeviceOrientation = false
 
 export const reset = () => {
@@ -236,7 +236,7 @@ document.addEventListener('touchstart', e => {
 document.addEventListener(
     'touchmove',
     e => {
-        e.preventDefault()
+        if (playing) e.preventDefault()
         if (e.touches.length === 1 && !zooming && !useDeviceOrientation) {
             deltaX = e.touches[0].clientX - mouseX
             deltaY = e.touches[0].clientY - mouseY
