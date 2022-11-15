@@ -10,11 +10,12 @@ let rotate = 0
 let fov = 45
 let zoom = 0
 const zoomFactor = 1.001
-const sensitivity = 0.0015
+const sensitivity = 1
 let zooming = false
 let zoomDistance = 0
 let playing = false
 let useDeviceOrientation = false
+let canvas: HTMLCanvasElement
 
 export const reset = () => {
     ra = 0
@@ -33,7 +34,7 @@ export const exit = () => {
 
 export default (
     gl: WebGL2RenderingContext,
-    canvas: HTMLCanvasElement,
+    _canvas: HTMLCanvasElement,
     stars: star[],
     lines: number[],
     data: Float32Array,
@@ -45,6 +46,7 @@ export default (
 ) => {
     const latitudeRadians = ((-latitude + 90) / 180) * Math.PI
     useDeviceOrientation = deviceOrientation
+    canvas = _canvas
 
     gl.clearColor(0, 0, 0, 1)
     gl.enable(gl.BLEND)
@@ -138,7 +140,6 @@ export default (
         fov = zoomFactor ** zoom * 45
         const siderealAngle =
             sidereal(Date.now(), longitude) * -Math.PI * 2 + Math.PI
-
         mat4.lookAt(
             viewMatrix,
             [0, 0, 0],
@@ -202,19 +203,23 @@ export default (
 
     canvas.width = canvas.clientWidth
     canvas.height = canvas.clientHeight
-    window.addEventListener('resize', () => {
-        canvas.width = canvas.clientWidth
-        canvas.height = canvas.clientHeight
-    })
 }
+
+window.addEventListener('resize', () => {
+    if (!playing) return
+    canvas.width = canvas.clientWidth
+    canvas.height = canvas.clientHeight
+})
+
 let deltaX = 0
 let deltaY = 0
 document.addEventListener('mousemove', e => {
+    if (!playing) return
     if (!useDeviceOrientation && e.buttons & 1) {
         deltaX = e.clientX - mouseX
         deltaY = e.clientY - mouseY
-        ra -= deltaX * sensitivity * zoomFactor ** zoom
-        dec += deltaY * sensitivity * zoomFactor ** zoom
+        ra -= (deltaX / canvas.height) * sensitivity * zoomFactor ** zoom
+        dec += (deltaY / canvas.height) * sensitivity * zoomFactor ** zoom
         dec = Math.min(Math.PI / 2, dec)
         dec = Math.max(-Math.PI / 2, dec)
     }
@@ -224,11 +229,13 @@ document.addEventListener('mousemove', e => {
 })
 
 document.addEventListener('wheel', e => {
+    if (!playing) return
     zoom += e.deltaY
     zoom = Math.min(Math.max(zoom, -8000), 500)
 })
 
 document.addEventListener('touchstart', e => {
+    if (!playing) return
     mouseX = e.touches[0].clientX
     mouseY = e.touches[0].clientY
 })
@@ -236,12 +243,13 @@ document.addEventListener('touchstart', e => {
 document.addEventListener(
     'touchmove',
     e => {
-        if (playing) e.preventDefault()
+        if (!playing) return
+        e.preventDefault()
         if (e.touches.length === 1 && !zooming && !useDeviceOrientation) {
             deltaX = e.touches[0].clientX - mouseX
             deltaY = e.touches[0].clientY - mouseY
-            ra -= deltaX * sensitivity * zoomFactor ** zoom
-            dec += deltaY * sensitivity * zoomFactor ** zoom
+            ra -= (deltaX / canvas.height) * sensitivity * zoomFactor ** zoom
+            dec += (deltaY / canvas.height) * sensitivity * zoomFactor ** zoom
             dec = Math.min(Math.PI / 2, dec)
             dec = Math.max(-Math.PI / 2, dec)
 
@@ -273,10 +281,12 @@ document.addEventListener(
 )
 
 document.addEventListener('touchend', e => {
+    if (!playing) return
     if (e.touches.length === 0) zooming = false
 })
 
 window.addEventListener('deviceorientation', e => {
+    if (!playing || !useDeviceOrientation) return
     ra = (-e.alpha * Math.PI) / 180
     dec = ((-e.gamma - 90) * Math.PI) / 180
     rotate = (e.beta * Math.PI) / 180

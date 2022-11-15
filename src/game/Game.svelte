@@ -63,20 +63,22 @@
         resetTimer()
     }
 
+    let fov: number
     const updateOverlay = (
         ctx: CanvasRenderingContext2D,
-        fov: number,
+        _fov: number,
         ra: number
     ) => {
         ctx.clearRect(0, 0, overlay.width, overlay.height)
+        fov = _fov
 
-        starLabels = starLabels.filter(({ frame }) => frame < 60)
+        starLabels = starLabels.filter(({ frame }) => frame < labelDuration)
         starLabels.forEach(label => {
-            drawStarLabel(ctx, label, fov)
+            drawStarLabel(ctx, label)
             label.frame++
         })
 
-        if (tries >= 3) flashStar(ctx, starsIndexed[answers[round]], fov)
+        if (tries >= 3) flashStar(ctx, starsIndexed[answers[round]])
         ctx.translate(40, overlay.height - 40)
         drawCompass(ctx, ra)
         ctx.resetTransform()
@@ -125,18 +127,14 @@
     }
 
     let flashFrame = 0
-    const flashStar = (
-        ctx: CanvasRenderingContext2D,
-        star: star,
-        fov: number
-    ) => {
+    const flashStar = (ctx: CanvasRenderingContext2D, star: star) => {
         const i = star.index
         let x = starScreenPos[3 * i]
         let y = -starScreenPos[3 * i + 1]
         const w = starScreenPos[3 * i + 2]
 
         if (w > 0 && flashFrame % 60 < 30) {
-            const size = starSize(star.magnitude, fov)
+            const size = starSize(star.magnitude)
             const screenX = ((x + 1) * overlay.width) / 2
             const screenY = ((y + 1) * overlay.height) / 2
             ctx.beginPath()
@@ -178,10 +176,11 @@
         } else flashFrame = (flashFrame + 1) % 60
     }
 
+    const labelDuration = 120
+
     const drawStarLabel = (
         ctx: CanvasRenderingContext2D,
-        label: { hic: string; frame: number; correct: boolean },
-        fov: number
+        label: { hic: string; frame: number; correct: boolean }
     ) => {
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
@@ -191,9 +190,9 @@
         if (starScreenPos[3 * i + 2] > 1) return
         const x = ((starScreenPos[3 * i] + 1) / 2) * canvas.width
         const y = -((starScreenPos[3 * i + 1] - 1) / 2) * canvas.height
-        const size = starSize(star.magnitude, fov)
+        const size = starSize(star.magnitude)
 
-        const alpha = 1 - label.frame / 60
+        const alpha = 1 - label.frame / labelDuration
 
         if (label.correct) {
             ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`
@@ -247,7 +246,11 @@
             const starY = -((starScreenPos[3 * i + 1] - 1) / 2) * canvas.height
             const delta = (mouseX - starX) ** 2 + (mouseY - starY) ** 2
 
-            if (delta < closest && delta < clickRange ** 2) {
+            if (
+                delta < closest &&
+                (delta <= clickRange ** 2 ||
+                    delta <= (starSize(star.magnitude) / 2) ** 2)
+            ) {
                 closest = delta
                 closestStar = star
             }
@@ -287,7 +290,7 @@
         })
     })
 
-    const starSize = (magnitude: number, fov: number) =>
+    const starSize = (magnitude: number) =>
         ((1.5 ** (-magnitude - 10) * 1000 * 45) / fov) *
         ((fov / 45 - 1) * 0.6 + 1) *
         Math.min(fov, 1)
