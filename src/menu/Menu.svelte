@@ -96,6 +96,13 @@
                     Loading stars data...
                 {/if}
             </div>
+            <a
+                href="https://github.com/tonmaiii"
+                class="creator"
+                target="_blank"
+                rel="noreferrer"
+                >by Tonmaii
+            </a>
         </div>
         <ConstellationSelector bind:included={includedConstellations} />
         <StarsSelector bind:starWithName bind:identifiers />
@@ -177,5 +184,9 @@
     input {
         font-size: 1rem;
         min-width: 0;
+    }
+
+    .creator {
+        font-size: 1rem;
     }
 </style>
