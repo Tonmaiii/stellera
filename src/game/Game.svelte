@@ -294,15 +294,14 @@
         ((1.5 ** (-magnitude - 10) * 1000 * 45) / fov) *
         ((fov / 45 - 1) * 0.6 + 1) *
         Math.min(fov, 1)
+
+    document.addEventListener('pointerup', handleClick)
+    document.addEventListener('pointerdown', () => (click = true))
+    document.addEventListener('pointermove', () => (click = false))
 </script>
 
 <canvas bind:this={canvas} />
-<canvas
-    bind:this={overlay}
-    on:mousedown={() => (click = true)}
-    on:mousemove={() => (click = false)}
-    on:mouseup={handleClick}
-/>
+<canvas bind:this={overlay} />
 
 {#if !completed}
     <Topbar
