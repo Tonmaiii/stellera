@@ -16,10 +16,6 @@ export class PlayerController {
 	deltaX = 0;
 	deltaY = 0;
 
-	update() {
-		this.fov = this.zoomFactor ** this.zoom * 45;
-	}
-
 	addEventListeners(canvas: HTMLCanvasElement) {
 		document.addEventListener('mousemove', (e) => {
 			if (!this.playing) return;
@@ -40,6 +36,7 @@ export class PlayerController {
 			if (!this.playing) return;
 			this.zoom += e.deltaY;
 			this.zoom = Math.min(Math.max(this.zoom, -8000), 500);
+			this.fov = this.zoomFactor ** this.zoom * 45;
 		});
 
 		document.addEventListener('touchstart', (e) => {

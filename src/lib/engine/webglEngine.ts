@@ -1,8 +1,7 @@
-import { equatorialToCartesian } from '$lib/util/equatorialToCartesian';
-import sidereal from '$lib/util/sidereal';
 import type { star } from '$lib/util/types';
+import { equatorialToCartesian, sidereal } from '$lib/util/utils';
 import { glMatrix, mat4 } from 'gl-matrix';
-import { PlayerController } from './playerControler';
+import { PlayerController } from './playerController';
 import {
 	fragmentShaderSource,
 	lineFragmentShader,
@@ -21,7 +20,6 @@ export class Engine {
 	fovUniformLocation!: WebGLUniformLocation | null;
 	screenUniformLocation!: WebGLUniformLocation | null;
 	transformMatrix!: Float32Array;
-	playerController: PlayerController;
 	latitude: number;
 	longitude: number;
 	drawLines: boolean;
@@ -48,21 +46,17 @@ export class Engine {
 
 		this.numStars = stars.length;
 		this.numLines = lines.length;
-		this.playerController = new PlayerController();
 		this.initializePrograms(stars, lines);
 
 		this.resize();
-		this.playerController.addEventListeners(canvas);
 
 		gl.clearColor(0, 0, 0, 1);
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 	}
 
-	update() {
-		if (!this.playerController.playing) return;
-		this.playerController.update();
-		this.updateMatrices();
+	update(playerController: PlayerController) {
+		this.updateMatrices(playerController);
 
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
@@ -76,7 +70,7 @@ export class Engine {
 		this.gl.useProgram(this.program);
 
 		this.gl.uniformMatrix4fv(this.transformMatrixUniformLocation, false, this.transformMatrix);
-		this.gl.uniform1f(this.fovUniformLocation, this.playerController.fov);
+		this.gl.uniform1f(this.fovUniformLocation, playerController.fov);
 		this.gl.uniform2f(this.screenUniformLocation, this.canvas.width, this.canvas.height);
 
 		this.gl.bindBufferBase(this.gl.TRANSFORM_FEEDBACK_BUFFER, 0, this.projectedVerticesBuffer);
@@ -88,18 +82,18 @@ export class Engine {
 		this.gl.getBufferSubData(this.gl.TRANSFORM_FEEDBACK_BUFFER, 0, this.starScreenPos);
 	}
 
-	updateMatrices() {
+	updateMatrices(playerController: PlayerController) {
 		const siderealAngle = sidereal(Date.now(), this.longitude) * -Math.PI * 2 + Math.PI;
 
 		mat4.identity(this.transformMatrix);
 		mat4.rotateY(this.transformMatrix, this.transformMatrix, siderealAngle);
-		mat4.rotateZ(this.transformMatrix, this.transformMatrix, this.playerController.rotate);
+		mat4.rotateZ(this.transformMatrix, this.transformMatrix, playerController.rotate);
 
 		const viewMatrix = new Float32Array(16);
 		mat4.lookAt(
 			viewMatrix,
 			[0, 0, 0],
-			equatorialToCartesian(this.playerController.ra, this.playerController.dec),
+			equatorialToCartesian(playerController.ra, playerController.dec),
 			[0, 1, 0]
 		);
 		mat4.multiply(this.transformMatrix, viewMatrix, this.transformMatrix);
@@ -107,7 +101,7 @@ export class Engine {
 		const projMatrix = new Float32Array(16);
 		mat4.perspective(
 			projMatrix,
-			glMatrix.toRadian(this.playerController.fov),
+			glMatrix.toRadian(playerController.fov),
 			this.canvas.width / this.canvas.height,
 			0.1,
 			1000.0
