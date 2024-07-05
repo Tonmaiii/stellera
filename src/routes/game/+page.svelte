@@ -1,5 +1,5 @@
 <script>
-	import data from '$lib/util/data';
+	import { data } from '$lib/util/data';
 	import Game from './Game.svelte';
 </script>
 
