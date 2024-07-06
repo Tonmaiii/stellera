@@ -1,9 +1,8 @@
 export class PlayerController {
 	mouseX = 0;
 	mouseY = 0;
-	ra = 0;
-	dec = 0;
-	rotate = 0;
+	azimuth = 0;
+	altitude = 0;
 	fov = 45;
 	zoom = 0;
 	zoomFactor = 1.001;
@@ -22,10 +21,12 @@ export class PlayerController {
 			if (!this.useDeviceOrientation && e.buttons & 1) {
 				this.deltaX = e.clientX - this.mouseX;
 				this.deltaY = e.clientY - this.mouseY;
-				this.ra -= (this.deltaX / canvas.height) * this.sensitivity * this.zoomFactor ** this.zoom;
-				this.dec += (this.deltaY / canvas.height) * this.sensitivity * this.zoomFactor ** this.zoom;
-				this.dec = Math.min(Math.PI / 2, this.dec);
-				this.dec = Math.max(-Math.PI / 2, this.dec);
+				this.azimuth -=
+					(this.deltaX / canvas.height) * this.sensitivity * this.zoomFactor ** this.zoom;
+				this.altitude +=
+					(this.deltaY / canvas.height) * this.sensitivity * this.zoomFactor ** this.zoom;
+				this.altitude = Math.min(Math.PI / 2, this.altitude);
+				this.altitude = Math.max(-Math.PI / 2, this.altitude);
 			}
 
 			this.mouseX = e.clientX;
@@ -53,12 +54,12 @@ export class PlayerController {
 				if (e.touches.length === 1 && !this.zooming && !this.useDeviceOrientation) {
 					this.deltaX = e.touches[0].clientX - this.mouseX;
 					this.deltaY = e.touches[0].clientY - this.mouseY;
-					this.ra -=
+					this.azimuth -=
 						(this.deltaX / canvas.height) * this.sensitivity * this.zoomFactor ** this.zoom;
-					this.dec +=
+					this.altitude +=
 						(this.deltaY / canvas.height) * this.sensitivity * this.zoomFactor ** this.zoom;
-					this.dec = Math.min(Math.PI / 2, this.dec);
-					this.dec = Math.max(-Math.PI / 2, this.dec);
+					this.altitude = Math.min(Math.PI / 2, this.altitude);
+					this.altitude = Math.max(-Math.PI / 2, this.altitude);
 
 					this.mouseX = e.touches[0].clientX;
 					this.mouseY = e.touches[0].clientY;
@@ -79,6 +80,7 @@ export class PlayerController {
 					const deltaZoom = this.zoomDistance - currentZoomDistance;
 					this.zoom += deltaZoom * 5;
 					this.zoom = Math.min(Math.max(this.zoom, -8000), 500);
+					this.fov = this.zoomFactor ** this.zoom * 45;
 
 					this.zoomDistance = currentZoomDistance;
 				}
@@ -93,9 +95,8 @@ export class PlayerController {
 	}
 
 	reset = () => {
-		this.ra = 0;
-		this.dec = 0;
-		this.rotate = 0;
+		this.azimuth = 0;
+		this.altitude = 0;
 		this.fov = 45;
 		this.zoom = 0;
 		this.zooming = false;

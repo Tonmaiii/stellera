@@ -1,20 +1,31 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 
-	export let name: string;
+	export let id: string;
+	export let selected = false;
 
 	const eventDispatcher = createEventDispatcher();
 </script>
 
-<button class="container" on:click={() => eventDispatcher('click')}>{name}</button>
+{#if selected}
+	<button class="container selected" on:click={() => eventDispatcher('click')}>{id}</button>
+{:else}
+	<button class="container unselected" on:click={() => eventDispatcher('click')}>{id}</button>
+{/if}
 
 <style>
 	.container {
 		width: 100%;
 		min-height: 3rem;
 		border: none;
-		border-bottom: 1px solid #000000;
+		border-bottom: 1px solid #404040;
 		background: none;
 		font: inherit;
+		color: inherit;
+	}
+
+	.container:hover,
+	.selected {
+		background-color: #2c2c2c;
 	}
 </style>

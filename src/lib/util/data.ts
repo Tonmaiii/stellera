@@ -10,7 +10,7 @@ export const data = writable<{
 export const fetchData = async () => {
 	const [stars, starsIndexed, constellationship] = await Promise.all(
 		['stars', 'stars_indexed', 'constellationship'].map(async (file) => {
-			return await (await fetch(`data/${file}.json`)).json();
+			return await (await fetch(`/data/${file}.json`)).json();
 		})
 	);
 	data.set({ stars, starsIndexed, constellationship });

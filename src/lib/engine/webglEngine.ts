@@ -27,6 +27,7 @@ export class Engine {
 	starScreenPos: Float32Array;
 	numStars: number;
 	numLines: number;
+	latitudeRadians!: number;
 
 	constructor(
 		gl: WebGL2RenderingContext,
@@ -86,14 +87,14 @@ export class Engine {
 		const siderealAngle = sidereal(Date.now(), this.longitude) * -Math.PI * 2 + Math.PI;
 
 		mat4.identity(this.transformMatrix);
+		mat4.rotateZ(this.transformMatrix, this.transformMatrix, -this.latitudeRadians);
 		mat4.rotateY(this.transformMatrix, this.transformMatrix, siderealAngle);
-		mat4.rotateZ(this.transformMatrix, this.transformMatrix, playerController.rotate);
 
 		const viewMatrix = new Float32Array(16);
 		mat4.lookAt(
 			viewMatrix,
 			[0, 0, 0],
-			equatorialToCartesian(playerController.ra, playerController.dec),
+			equatorialToCartesian(playerController.azimuth, playerController.altitude),
 			[0, 1, 0]
 		);
 		mat4.multiply(this.transformMatrix, viewMatrix, this.transformMatrix);
@@ -137,13 +138,11 @@ export class Engine {
 
 		this.transformMatrix = new Float32Array(16);
 
-		const latitudeRadians = ((-this.latitude + 90) / 180) * Math.PI;
-		mat4.identity(this.transformMatrix);
-		mat4.rotateZ(this.transformMatrix, this.transformMatrix, -latitudeRadians);
-		this.gl.useProgram(this.program);
-		this.gl.uniformMatrix4fv(this.transformMatrixUniformLocation, false, this.transformMatrix);
-		this.gl.useProgram(this.lineProgram);
-		this.gl.uniformMatrix4fv(this.transformMatrixLocationLine, false, this.transformMatrix);
+		this.latitudeRadians = ((-this.latitude + 90) / 180) * Math.PI;
+		// this.gl.useProgram(this.program);
+		// this.gl.uniformMatrix4fv(this.transformMatrixUniformLocation, false, this.transformMatrix);
+		// this.gl.useProgram(this.lineProgram);
+		// this.gl.uniformMatrix4fv(this.transformMatrixLocationLine, false, this.transformMatrix);
 
 		this.projectedVerticesBuffer = this.gl.createBuffer();
 		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.projectedVerticesBuffer);

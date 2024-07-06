@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Topbar from './Topbar.svelte';
 
+	import { goto } from '$app/navigation';
 	import { Overlay } from '$lib/engine/overlay';
 	import { PlayerController } from '$lib/engine/playerController';
 	import { Engine } from '$lib/engine/webglEngine';
@@ -14,7 +15,8 @@
 	if (!$data) throw new Error('stars data not loaded');
 	const { stars, starsIndexed, constellationship } = $data;
 
-	export let answers: string[];
+	export let map: { id: string; name: string; answers: string[] };
+	let answers = map.answers;
 	export let useDesignation: boolean;
 	export let showConstellation: boolean;
 
@@ -76,6 +78,7 @@
 	let click = false;
 	const clickRange = 30;
 	const handleClick = (e: MouseEvent) => {
+		if (!playerController.playing) return;
 		if (!click) return;
 
 		const mouseX = e.clientX;
@@ -146,7 +149,7 @@
 
 	const exitGame = () => {
 		playerController.exit();
-		location.href = '/';
+		goto(`/#${map.id}`);
 	};
 </script>
 
@@ -221,6 +224,7 @@
 		color: white;
 		font-size: 2rem;
 		padding: 0;
+		cursor: pointer;
 	}
 
 	div.result {
