@@ -23,6 +23,6 @@
 		longitude = $geolocation?.longitude ?? new Date().getTimezoneOffset() / -4;
 </script>
 
-{#if $starsData && map}
+{#if $starsData && map && $geolocation}
 	<Game {map} {useDesignation} {showConstellation} {latitude} {longitude} />
 {/if}

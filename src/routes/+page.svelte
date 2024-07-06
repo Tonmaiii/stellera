@@ -36,7 +36,7 @@
 	<div class="game-selector">
 		{#each maps as map}
 			<GameSelectorElement
-				id={map.name}
+				{map}
 				selected={map == selected}
 				on:click={() => {
 					selected = map;
@@ -48,14 +48,18 @@
 	<div class="game-settings">
 		{#if selected}
 			<h1>{selected.name}</h1>
-			<div class="default-settings">
-				<span class="toggle-text">Default Settings:</span>
+			<div class="setting default-setting">
+				<span class="toggle-text"
+					><span>Default Settings:</span><span class="small-text"
+						>(current location, show constellations, use common name)</span
+					></span
+				>
 				<Toggle bind:toggled={defaultSettings} />
 			</div>
-			{#if !defaultSettings}
-				<div class="advanced-settings">
+			<div class="advanced-settings">
+				{#if !defaultSettings}
 					<div class="setting">
-						<span class="toggle-text">Show Constellations:</span>
+						<span class="toggle-text">Show Constellation Lines:</span>
 						<Toggle bind:toggled={showConstellation} />
 					</div>
 					<div class="setting">
@@ -82,11 +86,11 @@
 							bind:value={longitudeInput}
 						/>
 					</div>
-				</div>
-			{/if}
+				{/if}
+			</div>
 			<a
 				class="play"
-				href={`/game/${selected.id}?showConstellation=${showConstellation}&useDesignation=${useDesignation}&lat=${parseFloat(latitudeInput)}&long=${parseFloat(longitudeInput)}`}
+				href={`/game/${selected.id}?showConstellation=${showConstellation}&useDesignation=${useDesignation}&lat=${latitude}&long=${longitude}`}
 				><span>PLAY</span></a
 			>
 		{/if}
@@ -114,7 +118,7 @@
 		flex-direction: column;
 		align-items: center;
 		flex: 2;
-		font-size: 1.5rem;
+		font-size: 1.25rem;
 	}
 
 	h1 {
@@ -124,21 +128,30 @@
 		font-size: 2rem;
 	}
 
-	.default-settings {
+	.default-setting {
 		margin-top: 4rem;
+		margin-bottom: 1rem;
+		width: 80%;
 	}
 	.advanced-settings {
-		margin-top: 4rem;
+		margin-top: 1rem;
+		width: 70%;
 	}
 
 	.setting {
 		display: flex;
 		justify-content: space-between;
 		height: 2.5rem;
+		align-items: center;
+	}
+
+	.small-text {
+		font-size: 1rem;
+		margin-left: 1rem;
 	}
 
 	.toggle-text {
-		margin-right: 2rem;
+		margin-right: 1rem;
 	}
 
 	input {

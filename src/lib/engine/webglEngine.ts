@@ -1,4 +1,4 @@
-import type { star } from '$lib/util/types';
+import type { Star } from '$lib/util/types';
 import { equatorialToCartesian, sidereal } from '$lib/util/utils';
 import { glMatrix, mat4 } from 'gl-matrix';
 import { PlayerController } from './playerController';
@@ -30,14 +30,15 @@ export class Engine {
 	latitudeRadians!: number;
 
 	constructor(
-		gl: WebGL2RenderingContext,
 		canvas: HTMLCanvasElement,
-		stars: star[],
+		stars: Star[],
 		lines: number[],
 		latitude: number,
 		longitude: number,
 		drawLines: boolean
 	) {
+		const gl = canvas.getContext('webgl2');
+		if (!gl) throw new Error('failed to get webgl2 context');
 		this.gl = gl;
 		this.canvas = canvas;
 		this.latitude = latitude;
@@ -110,7 +111,7 @@ export class Engine {
 		mat4.multiply(this.transformMatrix, projMatrix, this.transformMatrix);
 	}
 
-	initializePrograms(stars: star[], lines: number[]) {
+	initializePrograms(stars: Star[], lines: number[]) {
 		this.program = createProgram(this.gl, vertexShaderSource, fragmentShaderSource, ['screenPos']);
 		this.lineProgram = createProgram(this.gl, lineVertexShader, lineFragmentShader);
 

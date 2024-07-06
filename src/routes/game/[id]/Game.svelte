@@ -5,17 +5,19 @@
 	import { Overlay } from '$lib/engine/overlay';
 	import { PlayerController } from '$lib/engine/playerController';
 	import { Engine } from '$lib/engine/webglEngine';
+	import { saveGame } from '$lib/localstorage/recordData';
 	import { data } from '$lib/util/data';
 	import shuffle from '$lib/util/shuffle';
+	import { initialized } from '$lib/util/store';
 	import { formatTime, resetTimer, stopTimer, timer } from '$lib/util/timer';
-	import type { star } from '$lib/util/types';
+	import type { GameMap, Star } from '$lib/util/types';
 	import { starSize } from '$lib/util/utils';
 	import { onMount } from 'svelte';
 
 	if (!$data) throw new Error('stars data not loaded');
 	const { stars, starsIndexed, constellationship } = $data;
 
-	export let map: { id: string; name: string; answers: string[] };
+	export let map: GameMap;
 	let answers = map.answers;
 	export let useDesignation: boolean;
 	export let showConstellation: boolean;
@@ -39,6 +41,7 @@
 
 	let wrongClicks = 0;
 	let correctClicks = 0;
+	$: accuracy = correctClicks === 0 ? 0 : correctClicks / (correctClicks + wrongClicks);
 
 	let engine: Engine;
 	let overlay: Overlay;
@@ -57,22 +60,26 @@
 		resetTimer();
 	};
 
+	const completedGame = () => {
+		completed = true;
+		stopTimer();
+		accuracy = correctClicks / (correctClicks + wrongClicks);
+		saveGame(map.id, $timer, accuracy);
+	};
+
 	const correct = (hic: string) => {
 		round++;
 		tries = 0;
 		correctClicks++;
-		overlay.addStarLabel(hic, true);
+		overlay.addStarLabel(hic, true, true);
 		overlay.flashFrame = 0;
-		if (round >= rounds) {
-			completed = true;
-			stopTimer();
-		}
+		if (round >= rounds) completedGame();
 	};
 
 	const wrong = (hic: string) => {
 		tries++;
 		wrongClicks++;
-		overlay.addStarLabel(hic, false);
+		overlay.addStarLabel(hic, false, false, useDesignation);
 	};
 
 	let click = false;
@@ -85,7 +92,7 @@
 		const mouseY = e.clientY;
 
 		let closest = Infinity;
-		let closestStar: star | null = null;
+		let closestStar: Star | null = null;
 
 		for (let i = 0; i < stars.length; i++) {
 			const star = stars[i];
@@ -107,6 +114,10 @@
 		}
 
 		if (!closestStar) return;
+		if (completed) {
+			overlay.addStarLabel(closestStar.HIC, true, true);
+			return;
+		}
 		if (closestStar.HIC === answers[round]) {
 			correct(closestStar.HIC);
 		} else {
@@ -117,24 +128,20 @@
 	const update = () => {
 		if (!playerController.playing) return;
 		engine.update(playerController);
-		overlay.update(
-			engine.starScreenPos,
-			playerController,
-			answers[round],
-			useDesignation,
-			tries >= 3
-		);
+		overlay.update(engine.starScreenPos, playerController, answers[round], tries >= 3);
 		requestAnimationFrame(update);
 	};
 
 	onMount(() => {
-		const gl = canvas.getContext('webgl2');
-		if (!gl) return;
-		engine = new Engine(gl, canvas, stars, lines, latitude, longitude, showConstellation);
+		engine = new Engine(canvas, stars, lines, latitude, longitude, showConstellation);
 		overlay = new Overlay(overlayCanvas, starsIndexed);
-		resetGame();
-
 		overlay.resize();
+		engine.resize();
+
+		resetGame();
+		requestAnimationFrame(update);
+
+		if ($initialized) return;
 		window.addEventListener('resize', () => {
 			overlay.resize();
 			engine.resize();
@@ -143,8 +150,7 @@
 		document.addEventListener('pointerdown', () => (click = true));
 		document.addEventListener('pointermove', () => (click = false));
 		playerController.addEventListeners(canvas);
-
-		requestAnimationFrame(update);
+		$initialized = true;
 	});
 
 	const exitGame = () => {
@@ -161,9 +167,7 @@
 		name={useDesignation
 			? starsIndexed[answers[round]].designation_name
 			: starsIndexed[answers[round]].display_name}
-		percentage={correctClicks + wrongClicks === 0
-			? 0
-			: Math.round((100 * correctClicks) / (correctClicks + wrongClicks))}
+		percentage={Math.round(100 * accuracy)}
 		completed={round}
 		total={rounds}
 	/>

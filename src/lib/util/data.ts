@@ -1,9 +1,9 @@
 import { writable } from 'svelte/store';
-import type { star } from './types';
+import type { Star } from './types';
 
 export const data = writable<{
-	stars: star[];
-	starsIndexed: { [key: string]: star };
+	stars: Star[];
+	starsIndexed: { [key: string]: Star };
 	constellationship: { [key: string]: [string, string][] };
 } | null>(null);
 

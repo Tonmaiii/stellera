@@ -1,6 +1,14 @@
-import type { star } from '$lib/util/types';
+import type { Star } from '$lib/util/types';
 import { starSize } from '$lib/util/utils';
 import type { PlayerController } from './playerController';
+
+type Label = {
+	hic: string;
+	frame: number;
+	correct: boolean;
+	showAllNames: boolean;
+	useDesignationName: boolean;
+};
 
 export class Overlay {
 	canvas: HTMLCanvasElement;
@@ -8,13 +16,13 @@ export class Overlay {
 	labelDuration = 120;
 
 	flashFrame = 0;
-	starsIndexed: { [key: string]: star };
-	starLabels: { hic: string; frame: number; correct: boolean }[];
+	starsIndexed: { [key: string]: Star };
+	starLabels: Label[];
 
 	constructor(
 		canvas: HTMLCanvasElement,
 		starsIndexed: {
-			[key: string]: star;
+			[key: string]: Star;
 		}
 	) {
 		this.canvas = canvas;
@@ -22,20 +30,19 @@ export class Overlay {
 		if (!ctx) throw new Error('error getting canvas context');
 		this.ctx = ctx;
 		this.starsIndexed = starsIndexed;
-		this.starLabels = Array<{ hic: string; frame: number; correct: boolean }>();
+		this.starLabels = Array<Label>();
 	}
 
 	update(
 		starScreenPos: Float32Array,
 		playerController: PlayerController,
 		answer: string,
-		useDesignation: boolean,
 		reveal: boolean
 	) {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		this.starLabels = this.starLabels.filter(({ frame }) => frame < this.labelDuration);
 		this.starLabels.forEach((label) => {
-			this.drawStarLabel(starScreenPos, label, playerController.fov, useDesignation);
+			this.drawStarLabel(starScreenPos, label, playerController.fov);
 			label.frame++;
 		});
 
@@ -44,8 +51,14 @@ export class Overlay {
 		this.drawCompass(playerController.azimuth);
 	}
 
-	addStarLabel(hic: string, correct: boolean) {
-		this.starLabels.push({ hic, frame: 0, correct });
+	addStarLabel(hic: string, correct: boolean, showAllNames: boolean, useDesignationName = false) {
+		this.starLabels.push({
+			hic,
+			frame: 0,
+			correct,
+			showAllNames,
+			useDesignationName
+		});
 	}
 
 	removeStarLabels() {
@@ -83,7 +96,7 @@ export class Overlay {
 		this.ctx.resetTransform();
 	}
 
-	flashStar(star: star, starScreenPos: Float32Array, fov: number) {
+	flashStar(star: Star, starScreenPos: Float32Array, fov: number) {
 		const i = star.index;
 		let x = starScreenPos[3 * i];
 		let y = -starScreenPos[3 * i + 1];
@@ -132,12 +145,7 @@ export class Overlay {
 		} else this.flashFrame = (this.flashFrame + 1) % 60;
 	}
 
-	drawStarLabel(
-		starScreenPos: Float32Array,
-		label: { hic: string; frame: number; correct: boolean },
-		fov: number,
-		useDesignation: boolean
-	) {
+	drawStarLabel(starScreenPos: Float32Array, label: Label, fov: number) {
 		this.ctx.textAlign = 'center';
 		this.ctx.textBaseline = 'middle';
 		this.ctx.font = '1.2rem Arial';
@@ -150,20 +158,18 @@ export class Overlay {
 
 		const alpha = 1 - label.frame / this.labelDuration;
 
-		if (label.correct) {
-			this.ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-			this.ctx.fillText(star.display_name, x, y + (size / 2) * (7 / 5) + 16);
-			if (star.display_name !== star.designation_name && star.designation_name) {
-				this.ctx.fillText(star.designation_name, x, y + (size / 2) * (7 / 5) + 36);
-			}
-		} else {
-			this.ctx.fillStyle = `rgba(255, 0, 0, ${alpha})`;
-
-			if (useDesignation) {
-				this.ctx.fillText(star.designation_name, x, y + (size / 2) * (7 / 5) + 16);
-			} else {
-				this.ctx.fillText(star.display_name, x, y + (size / 2) * (7 / 5) + 16);
-			}
+		if (label.correct) this.ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+		else this.ctx.fillStyle = `rgba(255, 0, 0, ${alpha})`;
+		let yOffset = (size / 2) * (7 / 5) + 16;
+		if (label.showAllNames || !label.useDesignationName) {
+			this.ctx.fillText(star.display_name, x, y + yOffset);
+			yOffset += 20;
+		}
+		if (
+			label.useDesignationName ||
+			(label.showAllNames && star.display_name !== star.designation_name && star.designation_name)
+		) {
+			this.ctx.fillText(star.designation_name, x, y + yOffset);
 		}
 	}
 }
