@@ -1,3 +1,5 @@
+import { USER_STATE, user as userStore } from '$lib/firebase/auth';
+import { get } from 'svelte/store';
 import { updateJson } from './utils';
 
 type GameRecord = {
@@ -20,4 +22,9 @@ export const saveGame = (
 		games[id].push({ time, accuracy, showConstellation, useDesignation, timestamp: Date.now() });
 		return games;
 	});
+
+	const user = get(userStore);
+	if (user.state === USER_STATE.SIGNED_IN) {
+		// save game to firestore
+	}
 };
