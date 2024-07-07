@@ -16,4 +16,5 @@ export type GameMap = {
 	id: string;
 	name: string;
 	answers: string[];
+	initialRotation?: { ra: number; dec: number };
 };

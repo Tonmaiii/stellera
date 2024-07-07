@@ -29,17 +29,17 @@
 	class="container {selected ? 'selected' : 'unselected'}"
 	on:click={() => eventDispatcher('click')}
 >
-	<span>
-		{map.name}
-	</span>
-	{#if best}
-		<div>
-			<span>
-				{Math.round(best.accuracy * 100)}%
-			</span>
-			<span>{formatTime(best.time)}</span>
-		</div>
-	{/if}
+	<div class="row">
+		<span>{map.name}</span>
+	</div>
+	<div class="row">
+		{#if best}
+			<div>
+				<span>{Math.round(best.accuracy * 100)}%</span>
+				<span>{formatTime(best.time)}</span>
+			</div>
+		{/if}
+	</div>
 </button>
 
 <style>
@@ -54,7 +54,14 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: space-around;
-		padding: 1rem;
+		padding-left: 0.75rem;
+	}
+
+	.row {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 
 	.container:hover,

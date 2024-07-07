@@ -14,8 +14,8 @@
 	const latitudeParam = $page.url.searchParams.get('lat');
 	const longitudeParam = $page.url.searchParams.get('long');
 
-	const useDesignation = useDesignationParam ? useDesignationParam == 'true' : false;
-	const showConstellation = showConstellationParam ? showConstellationParam == 'true' : true;
+	const useDesignation = useDesignationParam ? useDesignationParam === 'true' : false;
+	const showConstellation = showConstellationParam ? showConstellationParam === 'true' : true;
 	let latitude = latitudeParam ? parseFloat(latitudeParam) : NaN;
 	if (!Number.isFinite(latitude)) latitude = $geolocation?.latitude ?? 0;
 	let longitude = longitudeParam ? parseFloat(longitudeParam) : NaN;

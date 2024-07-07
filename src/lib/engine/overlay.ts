@@ -48,7 +48,7 @@ export class Overlay {
 
 		if (reveal) this.flashStar(this.starsIndexed[answer], starScreenPos, playerController.fov);
 
-		this.drawCompass(playerController.azimuth);
+		this.drawCompass(playerController.az);
 	}
 
 	addStarLabel(hic: string, correct: boolean, showAllNames: boolean, useDesignationName = false) {

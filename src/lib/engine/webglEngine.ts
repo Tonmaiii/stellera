@@ -1,5 +1,5 @@
 import type { Star } from '$lib/util/types';
-import { equatorialToCartesian, sidereal } from '$lib/util/utils';
+import { altazimuthToCartesian, sidereal } from '$lib/util/utils';
 import { glMatrix, mat4 } from 'gl-matrix';
 import { PlayerController } from './playerController';
 import {
@@ -85,17 +85,17 @@ export class Engine {
 	}
 
 	updateMatrices(playerController: PlayerController) {
-		const siderealAngle = sidereal(Date.now(), this.longitude) * -Math.PI * 2 + Math.PI;
+		const siderealAngle = sidereal(Date.now(), this.longitude) - Math.PI;
 
 		mat4.identity(this.transformMatrix);
 		mat4.rotateZ(this.transformMatrix, this.transformMatrix, -this.latitudeRadians);
-		mat4.rotateY(this.transformMatrix, this.transformMatrix, siderealAngle);
+		mat4.rotateY(this.transformMatrix, this.transformMatrix, -siderealAngle);
 
 		const viewMatrix = new Float32Array(16);
 		mat4.lookAt(
 			viewMatrix,
 			[0, 0, 0],
-			equatorialToCartesian(playerController.azimuth, playerController.altitude),
+			altazimuthToCartesian(playerController.alt, playerController.az),
 			[0, 1, 0]
 		);
 		mat4.multiply(this.transformMatrix, viewMatrix, this.transformMatrix);

@@ -1,34 +1,74 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import maps from '$lib/data/maps.json';
+	import { getJson, setJson } from '$lib/localstorage/utils';
 	import { geolocation } from '$lib/util/geolocation';
-	import { onMount } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 	import Toggle from '../components/Toggle.svelte';
 	import GameSelectorElement from './GameSelectorElement.svelte';
 
+	let defaultSettings: boolean;
+	let showConstellations: boolean;
+	let useDesignation: boolean;
+	let latitude: number | null;
+	let longitude: number | null;
+
 	const hash = $page.url.hash.slice(1);
-	let selected = maps.find(({ id }) => id == hash) ?? null;
-	let defaultSettings = true;
-	let showConstellation = true;
-	let useDesignation = false;
+	let selected = maps.find(({ id }) => id === hash) ?? null;
+
 	let latitudeInput = '';
 	let longitudeInput = '';
+	let gameParams = new URLSearchParams();
 
-	let defaultLongitude = $geolocation?.longitude ?? new Date().getTimezoneOffset() / -4;
-
-	let latitude: number;
-	let longitude: number;
+	$: defaultLongitude = $geolocation?.longitude ?? new Date().getTimezoneOffset() / -4;
 	$: {
 		latitude = parseFloat(latitudeInput);
-		if (!Number.isFinite(latitude)) latitude = $geolocation?.latitude ?? 0;
+		if (!Number.isFinite(latitude)) latitude = null;
 		longitude = parseFloat(longitudeInput);
-		if (!Number.isFinite(longitude)) longitude = defaultLongitude;
+		if (!Number.isFinite(longitude)) longitude = null;
+
+		if (selected) {
+			gameParams = new URLSearchParams();
+			if (defaultSettings) {
+				gameParams.append('showConstellations', 'true');
+				gameParams.append('useDesignation', 'false');
+			} else {
+				gameParams.append('showConstellations', `${showConstellations}`);
+				gameParams.append('useDesignation', `${useDesignation}`);
+			}
+			if (latitude) gameParams.append('lat', `${latitude}`);
+			if (longitude) gameParams.append('long', `${longitude}`);
+			gameParams = gameParams;
+		}
 	}
 
 	onMount(() => {
 		if (!selected) {
 			location.hash = '';
 		}
+		({ defaultSettings, showConstellations, useDesignation, latitude, longitude } = getJson(
+			'game_settings',
+			{
+				defaultSettings: true,
+				showConstellations: true,
+				useDesignation: false,
+				latitude: null as number | null,
+				longitude: null as number | null
+			}
+		));
+
+		latitudeInput = latitude ? `${latitude}` : '';
+		longitudeInput = longitude ? `${longitude}` : '';
+	});
+
+	afterUpdate(() => {
+		setJson('game_settings', {
+			defaultSettings,
+			showConstellations,
+			useDesignation,
+			latitude,
+			longitude
+		});
 	});
 </script>
 
@@ -37,7 +77,7 @@
 		{#each maps as map}
 			<GameSelectorElement
 				{map}
-				selected={map == selected}
+				selected={map === selected}
 				on:click={() => {
 					selected = map;
 					location.hash = `#${map.id}`;
@@ -60,7 +100,7 @@
 				{#if !defaultSettings}
 					<div class="setting">
 						<span class="toggle-text">Show Constellation Lines:</span>
-						<Toggle bind:toggled={showConstellation} />
+						<Toggle bind:toggled={showConstellations} />
 					</div>
 					<div class="setting">
 						<span class="toggle-text">Use Designation Names:</span>
@@ -88,11 +128,7 @@
 					</div>
 				{/if}
 			</div>
-			<a
-				class="play"
-				href={`/game/${selected.id}?showConstellation=${showConstellation}&useDesignation=${useDesignation}&lat=${latitude}&long=${longitude}`}
-				><span>PLAY</span></a
-			>
+			<a class="play" href={`/game/${selected.id}?${gameParams}`}><span>PLAY</span></a>
 		{/if}
 	</div>
 </div>
@@ -131,11 +167,11 @@
 	.default-setting {
 		margin-top: 4rem;
 		margin-bottom: 1rem;
-		width: 80%;
+		min-width: 80%;
 	}
 	.advanced-settings {
 		margin-top: 1rem;
-		width: 70%;
+		min-width: 70%;
 	}
 
 	.setting {

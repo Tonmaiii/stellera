@@ -11,7 +11,7 @@
 	import { initialized } from '$lib/util/store';
 	import { formatTime, resetTimer, stopTimer, timer } from '$lib/util/timer';
 	import type { GameMap, Star } from '$lib/util/types';
-	import { starSize } from '$lib/util/utils';
+	import { equatorialToAltAz, starSize } from '$lib/util/utils';
 	import { onMount } from 'svelte';
 
 	if (!$data) throw new Error('stars data not loaded');
@@ -56,7 +56,16 @@
 		correctClicks = 0;
 		overlay.removeStarLabels();
 		answers = shuffle(answers);
-		playerController.reset();
+		if (map.initialRotation) {
+			const { alt, az } = equatorialToAltAz(
+				map.initialRotation.ra,
+				map.initialRotation.dec,
+				latitude,
+				longitude,
+				Date.now()
+			);
+			playerController.reset(alt, az);
+		} else playerController.reset();
 		resetTimer();
 	};
 
@@ -64,7 +73,7 @@
 		completed = true;
 		stopTimer();
 		accuracy = correctClicks / (correctClicks + wrongClicks);
-		saveGame(map.id, $timer, accuracy);
+		saveGame(map.id, $timer, accuracy, showConstellation, useDesignation);
 	};
 
 	const correct = (hic: string) => {
@@ -94,6 +103,9 @@
 		let closest = Infinity;
 		let closestStar: Star | null = null;
 
+		let closestAnswer = Infinity;
+		let closestAnswerStar: Star | null = null;
+
 		for (let i = 0; i < stars.length; i++) {
 			const star = stars[i];
 			if (!star.display_name) continue;
@@ -111,17 +123,29 @@
 				closest = delta;
 				closestStar = star;
 			}
+
+			if (
+				answers.includes(star.HIC) &&
+				delta < closestAnswer &&
+				(delta <= clickRange ** 2 ||
+					delta <= (starSize(star.magnitude, playerController.fov) / 2) ** 2)
+			) {
+				closestAnswer = delta;
+				closestAnswerStar = star;
+			}
 		}
 
-		if (!closestStar) return;
+		const clickedStar = closestAnswerStar ?? closestStar;
+
+		if (!clickedStar) return;
 		if (completed) {
-			overlay.addStarLabel(closestStar.HIC, true, true);
+			overlay.addStarLabel(clickedStar.HIC, true, true);
 			return;
 		}
-		if (closestStar.HIC === answers[round]) {
-			correct(closestStar.HIC);
+		if (clickedStar.HIC === answers[round]) {
+			correct(clickedStar.HIC);
 		} else {
-			wrong(closestStar.HIC);
+			wrong(clickedStar.HIC);
 		}
 	};
 

@@ -1,9 +1,22 @@
 import { updateJson } from './utils';
 
-export const saveGame = (id: string, time: number, accuracy: number) => {
-	updateJson<{ [key: string]: { time: number; accuracy: number }[] }>('games', {}, (games) => {
+type GameRecord = {
+	time: number;
+	accuracy: number;
+	showConstellation: boolean;
+	useDesignation: boolean;
+};
+
+export const saveGame = (
+	id: string,
+	time: number,
+	accuracy: number,
+	showConstellation: boolean,
+	useDesignation: boolean
+) => {
+	updateJson<{ [key: string]: GameRecord[] }>('games', {}, (games) => {
 		if (!(id in games)) games[id] = [];
-		games[id].push({ time, accuracy });
+		games[id].push({ time, accuracy, showConstellation, useDesignation });
 		return games;
 	});
 };

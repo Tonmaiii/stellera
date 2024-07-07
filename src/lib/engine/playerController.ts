@@ -1,8 +1,8 @@
 export class PlayerController {
 	mouseX = 0;
 	mouseY = 0;
-	azimuth = 0;
-	altitude = 0;
+	az = 0;
+	alt = 0;
 	fov = 45;
 	zoom = 0;
 	zoomFactor = 1.001;
@@ -21,12 +21,12 @@ export class PlayerController {
 			if (!this.useDeviceOrientation && e.buttons & 1) {
 				this.deltaX = e.clientX - this.mouseX;
 				this.deltaY = e.clientY - this.mouseY;
-				this.azimuth -=
-					(this.deltaX / canvas.height) * this.sensitivity * this.zoomFactor ** this.zoom;
-				this.altitude +=
-					(this.deltaY / canvas.height) * this.sensitivity * this.zoomFactor ** this.zoom;
-				this.altitude = Math.min(Math.PI / 2, this.altitude);
-				this.altitude = Math.max(-Math.PI / 2, this.altitude);
+				this.az -= (this.deltaX / canvas.height) * this.sensitivity * this.zoomFactor ** this.zoom;
+				this.alt += (this.deltaY / canvas.height) * this.sensitivity * this.zoomFactor ** this.zoom;
+				this.alt = Math.min(Math.PI / 2, this.alt);
+				this.alt = Math.max(-Math.PI / 2, this.alt);
+
+				console.log(this.alt, this.az);
 			}
 
 			this.mouseX = e.clientX;
@@ -54,12 +54,12 @@ export class PlayerController {
 				if (e.touches.length === 1 && !this.zooming && !this.useDeviceOrientation) {
 					this.deltaX = e.touches[0].clientX - this.mouseX;
 					this.deltaY = e.touches[0].clientY - this.mouseY;
-					this.azimuth -=
+					this.az -=
 						(this.deltaX / canvas.height) * this.sensitivity * this.zoomFactor ** this.zoom;
-					this.altitude +=
+					this.alt +=
 						(this.deltaY / canvas.height) * this.sensitivity * this.zoomFactor ** this.zoom;
-					this.altitude = Math.min(Math.PI / 2, this.altitude);
-					this.altitude = Math.max(-Math.PI / 2, this.altitude);
+					this.alt = Math.min(Math.PI / 2, this.alt);
+					this.alt = Math.max(-Math.PI / 2, this.alt);
 
 					this.mouseX = e.touches[0].clientX;
 					this.mouseY = e.touches[0].clientY;
@@ -94,11 +94,11 @@ export class PlayerController {
 		});
 	}
 
-	reset = () => {
-		this.azimuth = 0;
-		this.altitude = 0;
+	reset = (alt = 0, az = 0, zoom = 0) => {
+		this.alt = alt;
+		this.az = az;
 		this.fov = 45;
-		this.zoom = 0;
+		this.zoom = zoom;
 		this.zooming = false;
 		this.zoomDistance = 0;
 		this.playing = true;
