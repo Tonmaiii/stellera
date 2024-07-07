@@ -5,6 +5,7 @@ type GameRecord = {
 	accuracy: number;
 	showConstellation: boolean;
 	useDesignation: boolean;
+	timestamp: number;
 };
 
 export const saveGame = (
@@ -16,7 +17,7 @@ export const saveGame = (
 ) => {
 	updateJson<{ [key: string]: GameRecord[] }>('games', {}, (games) => {
 		if (!(id in games)) games[id] = [];
-		games[id].push({ time, accuracy, showConstellation, useDesignation });
+		games[id].push({ time, accuracy, showConstellation, useDesignation, timestamp: Date.now() });
 		return games;
 	});
 };
