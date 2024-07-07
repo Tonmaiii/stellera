@@ -168,10 +168,14 @@
 		margin-top: 4rem;
 		margin-bottom: 1rem;
 		min-width: 80%;
+		padding-left: 1rem;
+		padding-right: 1rem;
 	}
 	.advanced-settings {
 		margin-top: 1rem;
 		min-width: 70%;
+		padding-left: 1rem;
+		padding-right: 1rem;
 	}
 
 	.setting {
