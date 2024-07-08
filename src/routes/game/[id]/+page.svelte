@@ -7,7 +7,7 @@
 
 	export let data;
 	const map = data.map;
-	if (!map) goto('/');
+	if (!map) goto('/menu');
 
 	const useDesignationParam = $page.url.searchParams.get('useDesignation');
 	const showConstellationParam = $page.url.searchParams.get('showConstellations');
@@ -16,11 +16,15 @@
 
 	const useDesignation = useDesignationParam ? useDesignationParam === 'true' : false;
 	const showConstellation = showConstellationParam ? showConstellationParam === 'true' : true;
-	let latitude = latitudeParam ? parseFloat(latitudeParam) : NaN;
-	if (!Number.isFinite(latitude)) latitude = $geolocation?.latitude ?? 0;
-	let longitude = longitudeParam ? parseFloat(longitudeParam) : NaN;
-	if (!Number.isFinite(longitude))
-		longitude = $geolocation?.longitude ?? new Date().getTimezoneOffset() / -4;
+	let latitude: number;
+	let longitude: number;
+	$: {
+		latitude = latitudeParam ? parseFloat(latitudeParam) : NaN;
+		if (!Number.isFinite(latitude)) latitude = $geolocation?.latitude ?? 0;
+		longitude = longitudeParam ? parseFloat(longitudeParam) : NaN;
+		if (!Number.isFinite(longitude))
+			longitude = $geolocation?.longitude ?? new Date().getTimezoneOffset() / -4;
+	}
 </script>
 
 {#if $starsData && map && $geolocation}

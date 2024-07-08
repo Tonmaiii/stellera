@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import Toggle from '$lib/components/Toggle.svelte';
 	import maps from '$lib/data/maps.json';
 	import { getJson, setJson } from '$lib/localstorage/utils';
 	import { geolocation } from '$lib/util/geolocation';
 	import { afterUpdate, onMount } from 'svelte';
-	import Toggle from '../components/Toggle.svelte';
 	import GameSelectorElement from './GameSelectorElement.svelte';
+	import TableSwitcher from './TableSwitcher.svelte';
 
 	let defaultSettings: boolean;
 	let showConstellations: boolean;
@@ -85,50 +86,55 @@
 			/>
 		{/each}
 	</div>
-	<div class="game-settings">
+	<div class="right">
 		{#if selected}
-			<h1>{selected.name}</h1>
-			<div class="setting default-setting">
-				<span class="toggle-text"
-					><span>Default Settings:</span><span class="small-text"
-						>(current location, show constellations, use common name)</span
-					></span
-				>
-				<Toggle bind:toggled={defaultSettings} />
+			<div class="game-settings">
+				<h1>{selected.name}</h1>
+				<TableSwitcher id={selected.id} />
+				<div class="setting default-setting">
+					<span class="toggle-text"
+						><span>Default Settings:</span><span class="small-text"
+							>(current location, show constellations, use common name)</span
+						></span
+					>
+					<Toggle bind:toggled={defaultSettings} />
+				</div>
+				<div class="advanced-settings">
+					{#if !defaultSettings}
+						<div class="setting">
+							<span class="toggle-text">Show Constellation Lines:</span>
+							<Toggle bind:toggled={showConstellations} />
+						</div>
+						<div class="setting">
+							<span class="toggle-text">Use Designation Names:</span>
+							<Toggle bind:toggled={useDesignation} />
+						</div>
+						<div class="setting">
+							<span class="toggle-text">Latitude:</span>
+							<input
+								type="text"
+								name="latitude"
+								id="latitude"
+								placeholder={`${$geolocation?.latitude ?? 0}`}
+								bind:value={latitudeInput}
+							/>
+						</div>
+						<div class="setting">
+							<span class="toggle-text">Longitude:</span>
+							<input
+								type="text"
+								name="longitude"
+								id="longitude"
+								placeholder={`${defaultLongitude}`}
+								bind:value={longitudeInput}
+							/>
+						</div>
+					{/if}
+				</div>
 			</div>
-			<div class="advanced-settings">
-				{#if !defaultSettings}
-					<div class="setting">
-						<span class="toggle-text">Show Constellation Lines:</span>
-						<Toggle bind:toggled={showConstellations} />
-					</div>
-					<div class="setting">
-						<span class="toggle-text">Use Designation Names:</span>
-						<Toggle bind:toggled={useDesignation} />
-					</div>
-					<div class="setting">
-						<span class="toggle-text">Latitude:</span>
-						<input
-							type="text"
-							name="latitude"
-							id="latitude"
-							placeholder={`${$geolocation?.latitude ?? 0}`}
-							bind:value={latitudeInput}
-						/>
-					</div>
-					<div class="setting">
-						<span class="toggle-text">Longitude:</span>
-						<input
-							type="text"
-							name="longitude"
-							id="longitude"
-							placeholder={`${defaultLongitude}`}
-							bind:value={longitudeInput}
-						/>
-					</div>
-				{/if}
+			<div class="play-wrapper">
+				<a href={`/game/${selected.id}?${gameParams}`}><span>PLAY</span></a>
 			</div>
-			<a class="play" href={`/game/${selected.id}?${gameParams}`}><span>PLAY</span></a>
 		{/if}
 	</div>
 </div>
@@ -139,6 +145,7 @@
 		width: 100%;
 		height: 100%;
 	}
+
 	.game-selector {
 		flex: 1;
 		display: flex;
@@ -149,18 +156,27 @@
 		background-color: #1a1a1a;
 	}
 
+	.right {
+		max-height: 100%;
+		flex: 2;
+		display: flex;
+		flex-direction: column;
+	}
+
 	.game-settings {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		flex: 2;
 		font-size: 1.25rem;
+		overflow: auto;
+		flex: 1;
 	}
 
 	h1 {
 		text-align: center;
 		margin: none;
 		margin-top: 3rem;
+		margin-bottom: 3rem;
 		font-size: 2rem;
 	}
 
@@ -202,25 +218,29 @@
 		border-bottom: 2px solid #3ac7ff;
 		width: 10rem;
 		color: inherit;
+		background-color: #262626;
 	}
 
 	a {
 		background-color: #3ac7ff;
 		color: #000000;
 		text-decoration: none;
-		font-size: 2.5rem;
+		font-size: 2rem;
 		width: 12rem;
-		height: 5rem;
 		text-align: center;
 		border-radius: 5rem;
-		padding: none;
+		padding-top: 0.5rem;
+		padding-bottom: 0.5rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
 
-	.play {
-		margin-top: auto;
-		margin-bottom: 5rem;
+	.play-wrapper {
+		border-top: 1px solid #404040;
+		min-height: 6rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 </style>

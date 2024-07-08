@@ -1,6 +1,7 @@
-import { USER_STATE, user as userStore } from '$lib/firebase/auth';
+import { user as userStore } from '$lib/firebase/auth';
+import { db } from '$lib/firebase/firestore';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { get } from 'svelte/store';
-import { updateJson } from './utils';
 
 type GameRecord = {
 	time: number;
@@ -10,21 +11,29 @@ type GameRecord = {
 	timestamp: number;
 };
 
-export const saveGame = (
+export const saveGame = async (
 	id: string,
 	time: number,
 	accuracy: number,
 	showConstellation: boolean,
 	useDesignation: boolean
 ) => {
-	updateJson<{ [key: string]: GameRecord[] }>('games', {}, (games) => {
-		if (!(id in games)) games[id] = [];
-		games[id].push({ time, accuracy, showConstellation, useDesignation, timestamp: Date.now() });
-		return games;
-	});
-
 	const user = get(userStore);
-	if (user.state === USER_STATE.SIGNED_IN) {
-		// save game to firestore
+	if (user.user) {
+		try {
+			const gamesCollection = collection(db, 'games');
+			await addDoc(gamesCollection, {
+				playerId: user.user.uid,
+				gameId: id,
+				time,
+				accuracy,
+				showConstellation,
+				useDesignation,
+				timestamp: serverTimestamp(),
+				anonymous: user.user.isAnonymous
+			});
+		} catch (e) {
+			console.error('Error adding document: ', e);
+		}
 	}
 };

@@ -40,7 +40,8 @@ export const equatorialToAltAz = (
 	// Azimuth calculation
 	const cosAz =
 		(Math.sin(decRad) - Math.sin(alt) * Math.sin(latRad)) / (Math.cos(alt) * Math.cos(latRad));
-	const az = -Math.acos(cosAz);
+	let az = Math.acos(cosAz);
+	if (0 < ha && ha < Math.PI) az = -az;
 
 	return { alt, az };
 };

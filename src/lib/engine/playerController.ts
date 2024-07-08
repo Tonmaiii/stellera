@@ -25,8 +25,6 @@ export class PlayerController {
 				this.alt += (this.deltaY / canvas.height) * this.sensitivity * this.zoomFactor ** this.zoom;
 				this.alt = Math.min(Math.PI / 2, this.alt);
 				this.alt = Math.max(-Math.PI / 2, this.alt);
-
-				console.log(this.alt, this.az);
 			}
 
 			this.mouseX = e.clientX;

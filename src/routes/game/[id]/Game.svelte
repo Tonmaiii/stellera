@@ -108,7 +108,7 @@
 
 		for (let i = 0; i < stars.length; i++) {
 			const star = stars[i];
-			if (!star.display_name) continue;
+			if (!star.display_name && !answers.includes(star.HIC)) continue;
 			if (engine.starScreenPos[3 * i + 2] < 0) continue;
 
 			const starX = ((engine.starScreenPos[3 * i] + 1) / 2) * canvas.width;
@@ -165,7 +165,7 @@
 		resetGame();
 		requestAnimationFrame(update);
 
-		if ($initialized) return;
+		// if ($initialized) return;
 		window.addEventListener('resize', () => {
 			overlay.resize();
 			engine.resize();
@@ -179,7 +179,7 @@
 
 	const exitGame = () => {
 		playerController.exit();
-		goto(`/#${map.id}`);
+		goto(`/menu#${map.id}`);
 	};
 </script>
 
