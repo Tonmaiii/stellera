@@ -111,6 +111,11 @@
 				<span class="time">{formatTime(userScore.time)}</span>
 			</div>
 		{/if}
+		{#if $user.user?.isAnonymous}
+			<div class="row user-placement">
+				<span><a href="/login">Sign up</a> to get your name on the leaderboard</span>
+			</div>
+		{/if}
 	{:else}
 		{#each { length: 10 } as _, i}
 			<div class="row {i % 2 == 0 ? 'even' : 'odd'}"><span>&nbsp;</span></div>
@@ -119,6 +124,10 @@
 </div>
 
 <style>
+	a {
+		color: inherit;
+	}
+
 	.container {
 		font-size: 1rem;
 		width: 100%;

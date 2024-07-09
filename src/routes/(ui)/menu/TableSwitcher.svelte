@@ -48,6 +48,7 @@
 		font-size: 1rem;
 		color: inherit;
 		margin: 0;
+		padding: 0.25;
 	}
 
 	.selected {

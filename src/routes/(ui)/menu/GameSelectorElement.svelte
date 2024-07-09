@@ -1,28 +1,17 @@
 <script lang="ts">
-	import { getJson } from '$lib/localstorage/utils';
+	import { user } from '$lib/firebase/auth';
+	import { getHighScores, highScores } from '$lib/util/store';
 	import { formatTime } from '$lib/util/timer';
 	import type { GameMap } from '$lib/util/types';
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 
 	export let map: GameMap;
 	export let selected = false;
 
-	let best: { time: number; accuracy: number } | null = null;
+	$: best = $highScores.get(map.id)?.[0] ?? null;
 
 	const eventDispatcher = createEventDispatcher();
-	onMount(() => {
-		const data = getJson<{ [key: string]: { time: number; accuracy: number }[] }>('games', {});
-		const games = data[map.id];
-		if (games) {
-			best = games.reduce((a, b) => {
-				if (a.accuracy > b.accuracy) return a;
-				if (b.accuracy > a.accuracy) return b;
-
-				if (a.time < b.time) return a;
-				return b;
-			});
-		}
-	});
+	$: if ($user.user) getHighScores(map.id, $user.user.uid);
 </script>
 
 <button

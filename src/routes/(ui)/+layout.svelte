@@ -14,8 +14,12 @@
 <div class="main">
 	<header>
 		<div class="left">
-			<a href="/">Home</a>
-			<a href="/">Leaderboard</a>
+			<a href="/">
+				<svg>
+					<image xlink:href="/images/stellera.svg" />
+				</svg>
+			</a>
+			<!-- <a href="/">Leaderboard</a> -->
 		</div>
 
 		<div class="right">
@@ -34,9 +38,15 @@
 <style>
 	header {
 		display: flex;
-		min-height: 2rem;
+		min-height: 2.2rem;
 		background-color: #141414;
 		border-bottom: 1px solid #404040;
+	}
+
+	image,
+	svg {
+		height: 1rem;
+		width: 5rem;
 	}
 
 	button {
@@ -54,7 +64,6 @@
 
 	.content {
 		flex: 1;
-		overflow: auto;
 	}
 
 	a {

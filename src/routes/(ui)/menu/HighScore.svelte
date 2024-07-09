@@ -1,45 +1,21 @@
 <script lang="ts">
 	import { user } from '$lib/firebase/auth';
-	import { db } from '$lib/firebase/firestore';
-	import type { GameEntry } from '$lib/firebase/types';
+	import { getHighScores, highScores } from '$lib/util/store';
 	import { formatTime } from '$lib/util/timer';
-	import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 	import { afterUpdate } from 'svelte';
 
 	export let id: string;
 	let previousId: string | null = null;
-	let scores: GameEntry[] | null = null;
+	$: scores = $highScores.get(id);
 
-	const updateHighScores = async () => {
+	const update = async () => {
 		if (previousId === id) return;
 		if (!$user.user) return;
-		scores = null;
-		try {
-			const gamesCollection = collection(db, 'games');
-
-			const q = query(
-				gamesCollection,
-				where('gameId', '==', id),
-				where('playerId', '==', $user.user.uid),
-				orderBy('accuracy', 'desc'),
-				orderBy('time', 'asc')
-			);
-
-			const querySnapshot = await getDocs(q);
-
-			scores = [];
-			querySnapshot.forEach((doc) => {
-				const data = doc.data() as GameEntry;
-				scores?.push(data);
-			});
-			scores = scores;
-		} catch (e) {
-			console.error('Error querying documents: ', e);
-		}
+		getHighScores(id, $user.user.uid);
 		previousId = id;
 	};
 
-	afterUpdate(updateHighScores);
+	afterUpdate(update);
 </script>
 
 <div class="container">

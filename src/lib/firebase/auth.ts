@@ -57,7 +57,12 @@ export const userData = writable<UserEntry | null>(null);
 export const initializeAuth = () => {
 	const localStorageUser = localStorage.getItem('user');
 	if (localStorageUser) {
-		user.set(JSON.parse(localStorageUser) ?? { state: USER_STATE.SIGNED_OUT });
+		const parsedUser = JSON.parse(localStorageUser);
+		user.set(
+			parsedUser
+				? { user: parsedUser, state: USER_STATE.SIGNED_IN }
+				: { state: USER_STATE.SIGNED_OUT, user: null }
+		);
 	}
 	onAuthStateChanged(auth, async (newUser) => {
 		if (newUser) {
