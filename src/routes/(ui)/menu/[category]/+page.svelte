@@ -1,7 +1,7 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Toggle from '$lib/components/Toggle.svelte';
-	import maps from '$lib/data/maps.json';
 	import { getJson, setJson } from '$lib/localstorage/utils';
 	import { geolocation } from '$lib/util/geolocation';
 	import { afterUpdate, onMount } from 'svelte';
@@ -14,7 +14,16 @@
 	let latitude: number | null;
 	let longitude: number | null;
 
+	export let data;
+	if (!data.maps) goto('/menu/recommended');
+	const maps = data.maps as {
+		id: string;
+		name: string;
+		answers: string[];
+		initialRotation?: { ra: number; dec: number };
+	}[];
 	const hash = $page.url.hash.slice(1);
+	console.log(maps);
 	let selected = maps.find(({ id }) => id === hash) ?? null;
 
 	let latitudeInput = '';

@@ -1,0 +1,63 @@
+{
+	"recommended": ["10bright", "20bright", "zodiac_alf", "orion", "ursamajor"],
+	"winter": [
+		"orion",
+		"canismajor",
+		"canisminor",
+		"cancer",
+		"columba",
+		"lepus",
+		"gemini_easy",
+		"gemini_hard",
+		"taurus_easy",
+		"taurus_hard",
+		"auriga_easy",
+		"auriga_hard",
+		"perseus",
+		"aries",
+		"pegasus",
+		"andromeda"
+	],
+	"northern_circumpolar": [
+		"ursaminor_easy",
+		"ursaminor_hard",
+		"draco_easy",
+		"draco_hard",
+		"camelopardalis",
+		"ursamajor",
+		"cassiopiae"
+	],
+	"summer": [
+		"leo",
+		"virgo",
+		"libra",
+		"scorpius",
+		"sagittarius",
+		"aquila",
+		"cygnus",
+		"lyra",
+		"hercules",
+		"bootes",
+		"coronaborealis",
+		"ophiuchus",
+		"comaberenices",
+		"aquarius",
+		"capricornus",
+		"piscisaustrinus"
+	],
+	"southern_circumpolar": [
+		"lupus",
+		"centaurus_easy",
+		"centaurus_hard",
+		"crux",
+		"tucana",
+		"grus",
+		"pavo",
+		"phoenix",
+		"puppis",
+		"vela",
+		"carina",
+		"triangulumaustrale_easy",
+		"triangulumaustrale_hard"
+	]
+}

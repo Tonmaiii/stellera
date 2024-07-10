@@ -18,69 +18,70 @@
 	<div class="recommended">
 		<div class="recommended-head">Play our recommended games</div>
 		<div class="recommended-body">
-			<div class="recommended-card">
-				<div class="recommended-card-head">Orion</div>
-				<p class="recommended-card-text">
+			<div class="card">
+				<div class="card-head">Orion</div>
+				<p class="card-text">
 					One of the most recognizable constellation of the night sky, featuring the 'Belt of Orion'
 					made up of three aligned stars.
 				</p>
-				<a href="/menu#orion" class="play">PLAY</a>
+				<a href="/menu/recommended#orion" class="play">PLAY</a>
 			</div>
-			<div class="recommended-card">
-				<div class="recommended-card-head">Ursa Major</div>
-				<p class="recommended-card-text">
+			<div class="card">
+				<div class="card-head">Ursa Major</div>
+				<p class="card-text">
 					Known as the Great Bear, Ursa Major is one of the largest and most recognizable
 					constellations in the night sky. Featuring the famous Big Dipper asterism.
 				</p>
-				<a href="/menu#ursamajor" class="play">PLAY</a>
+				<a href="/menu/recommended#ursamajor" class="play">PLAY</a>
 			</div>
-			<div class="recommended-card">
-				<div class="recommended-card-head">Bright Stars</div>
-				<p class="recommended-card-text">
+			<div class="card">
+				<div class="card-head">Bright Stars</div>
+				<p class="card-text">
 					Explore the luminous giants of the night sky, from the dazzling Sirius to the brilliant
 					Vega. Learn about their characteristics and how to identify them.
 				</p>
-				<a href="/menu#10bright" class="play">PLAY</a>
+				<a href="/menu/recommended#10bright" class="play">PLAY</a>
+			</div>
+		</div>
+		<a href="/menu/recommended" class="more-recommended">Other recommended games →</a>
+	</div>
+	<div class="recommended">
+		<div class="recommended-head">Other Categories</div>
+		<div class="recommended-body">
+			<div class="card">
+				<div class="card-head">Northern Circumpolar</div>
+				<p class="card-text">
+					See constellations that never set! In the northern hemisphere, constellations like Ursa
+					Major and Cassiopeia are always visible, circling the North Star all year."
+				</p>
+				<a href="/menu/northern_circumpolar" class="play">View</a>
+			</div>
+			<div class="card">
+				<div class="card-head">Southern Circumpolar</div>
+				<p class="card-text">
+					Explore constellations always in view from the southern hemisphere! The Southern Cross and
+					Centaurus never dip below the horizon, offering a constant celestial display.
+				</p>
+				<a href="/menu/southern_circumpolar" class="play">View</a>
+			</div>
+			<div class="card">
+				<div class="card-head">Winter Constellations</div>
+				<p class="card-text">
+					Enjoy Winter Constellations like Orion and Taurus during northern hemisphere winters. In
+					the southern hemisphere, see these constellations in summer.
+				</p>
+				<a href="/menu/winter" class="play">View</a>
+			</div>
+			<div class="card">
+				<div class="card-head">Summer Constellations</div>
+				<p class="card-text">
+					Marvel at Summer Constellations like Lyra and Scorpius lighting up northern hemisphere
+					summer nights. In the southern hemisphere, see these constellations in winter.
+				</p>
+				<a href="/menu/summer" class="play">View</a>
 			</div>
 		</div>
 	</div>
-	<!-- <div class="bottom">
-		<div class="bottom-head">Other games</div>
-		<div class="bottom-section-head">Category</div>
-		<div class="bottom-section">
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-		</div>
-		<div class="bottom-section-head">Other games</div>
-		<div class="bottom-section">
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-			<a href="/menu" class="game-link">Some game</a>
-		</div>
-	</div> -->
 </div>
 
 <style>
@@ -132,11 +133,16 @@
 		margin-bottom: 0.5rem;
 	}
 
+	.more-recommended {
+		margin-top: 0.5rem;
+		margin-left: 0.5rem;
+	}
+
 	.recommended-body {
 		display: flex;
 	}
 
-	.recommended-card {
+	.card {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -148,39 +154,13 @@
 		border-radius: 0.5rem;
 	}
 
-	.recommended-card-head {
+	.card-head {
 		font-weight: bold;
 		margin-bottom: 0.5rem;
 	}
 
-	.recommended-card-text {
+	.card-text {
 		margin-bottom: 2rem;
-	}
-
-	.bottom {
-		display: flex;
-		flex-direction: column;
-		padding-left: 4rem;
-		padding-right: 4rem;
-	}
-
-	.bottom-head {
-		font-size: 1.2rem;
-		margin-top: 2rem;
-		text-align: center;
-	}
-
-	.bottom-section-head {
-		font-size: 1.15rem;
-		margin-bottom: 1rem;
-		margin-top: 2rem;
-	}
-
-	.bottom-section {
-		display: flex;
-		flex-direction: column;
-		background-color: #292929;
-		padding: 1rem;
 	}
 
 	.play {
