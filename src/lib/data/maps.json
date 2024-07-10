@@ -363,13 +363,13 @@
 		"initialRotation": { "ra": 0, "dec": 0 }
 	},
 	{
-		"id": "centaurus_easl",
+		"id": "centaurus_easy",
 		"name": "Centaurus (Easy mode)",
 		"answers": ["71683", "68702", "68933", "61932", "66657", "71352"],
 		"initialRotation": { "ra": 0, "dec": 0 }
 	},
 	{
-		"id": "centaurus_harl",
+		"id": "centaurus_hard",
 		"name": "Centaurus (Hard mode)",
 		"answers": [
 			"71683",
@@ -389,61 +389,61 @@
 		"initialRotation": { "ra": 0, "dec": 0 }
 	},
 	{
-		"id": "crul",
+		"id": "crux",
 		"name": "Crux",
 		"answers": ["60718", "62434", "61084", "59747"],
 		"initialRotation": { "ra": 0, "dec": 0 }
 	},
 	{
-		"id": "tucanl",
+		"id": "tucana",
 		"name": "Tucana",
 		"answers": ["110130", "114996", "1599", "5896", "2484"],
 		"initialRotation": { "ra": 0, "dec": 0 }
 	},
 	{
-		"id": "grul",
+		"id": "grus",
 		"name": "Grus",
 		"answers": ["68002", "112122", "108085", "112623", "114421"],
 		"initialRotation": { "ra": 0, "dec": 0 }
 	},
 	{
-		"id": "pavl",
+		"id": "pavo",
 		"name": "Pavo",
 		"answers": ["100751", "102395", "99240", "86929", "98495"],
 		"initialRotation": { "ra": 0, "dec": 0 }
 	},
 	{
-		"id": "phoenil",
+		"id": "phoenix",
 		"name": "Phoenix",
 		"answers": ["2081", "5165", "6867", "765", "2072", "7083"],
 		"initialRotation": { "ra": 0, "dec": 0 }
 	},
 	{
-		"id": "puppil",
+		"id": "puppis",
 		"name": "Puppis",
 		"answers": ["39429", "35264", "39757", "32768", "31685", "36377", "38170"],
 		"initialRotation": { "ra": 0, "dec": 0 }
 	},
 	{
-		"id": "vell",
+		"id": "vela",
 		"name": "Vela",
 		"answers": ["44816", "39953", "45941", "42913", "52727", "48774"],
 		"initialRotation": { "ra": 0, "dec": 0 }
 	},
 	{
-		"id": "carinl",
+		"id": "carina",
 		"name": "Carina",
 		"answers": ["30438", "45238", "41037", "45556", "52419", "50099"],
 		"initialRotation": { "ra": 0, "dec": 0 }
 	},
 	{
-		"id": "triangulumaustrale_easl",
+		"id": "triangulumaustrale_easy",
 		"name": "Triangulum Australe (Easy mode)",
 		"answers": ["82273", "77952", "74946"],
 		"initialRotation": { "ra": 0, "dec": 0 }
 	},
 	{
-		"id": "triangulumaustrale_harl",
+		"id": "triangulumaustrale_hard",
 		"name": "Triangulum Australe (Hard mode)",
 		"answers": ["82273", "77952", "74946", "79664", "76440"],
 		"initialRotation": { "ra": 0, "dec": 0 }
