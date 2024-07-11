@@ -59,8 +59,7 @@
 			"100064",
 			"109074",
 			"9487"
-		],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		]
 	},
 	{
 		"id": "orion",
@@ -72,37 +71,37 @@
 		"id": "canismajor",
 		"name": "Canis Major",
 		"answers": ["32349", "30324", "34444", "33579", "35904", "30122"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 103.2962500, "dec": -22.3023611 }
 	},
 	{
 		"id": "canisminor",
 		"name": "Canis Minor",
 		"answers": ["37279", "36188"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 113.6316667, "dec": 6.7045556 }
 	},
 	{
 		"id": "cancer",
 		"name": "Cancer",
 		"answers": ["44066", "42911", "42806", "40526"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 130.3950000, "dec": 19.5149722 }
 	},
 	{
 		"id": "columba",
 		"name": "Columba",
 		"answers": ["26634", "27628", "30277", "25859", "28328"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 89.2258333, "dec": -35.7206667 }
 	},
 	{
 		"id": "lepus",
 		"name": "Lepus",
 		"answers": ["25985", "25606", "23685", "24305", "27288", "27072", "28103", "27654"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 83.2358333, "dec": -17.3863611 }
 	},
 	{
 		"id": "gemini_easy",
 		"name": "Gemini (Easy mode)",
 		"answers": ["31681", "37826", "36850", "32246", "34088", "30343", "29655"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 103.7933333, "dec": 26.1680833 }
 	},
 	{
 		"id": "gemini_hard",
@@ -122,13 +121,13 @@
 			"33018",
 			"36046"
 		],
-		"initialRotation": { "ra": 0, "dec": 0 }
-	},
+		"initialRotation": { "ra": 103.7933333, "dec": 26.1680833 }
+        },
 	{
 		"id": "taurus_easy",
 		"name": "Taurus (Easy mode)",
 		"answers": ["21421", "25428", "26451", "20894", "21881"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 67.0575000, "dec": 17.9879167 }
 	},
 	{
 		"id": "taurus_hard",
@@ -147,61 +146,61 @@
 			"20455",
 			"20885"
 		],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 67.0575000, "dec": 17.9879167 }
 	},
 	{
 		"id": "auriga_easy",
 		"name": "Auriga (Easy mode)",
 		"answers": ["24608", "28360", "28380", "23015"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 82.0379167, "dec": 38.6891667 }
 	},
 	{
 		"id": "auriga_hard",
 		"name": "Auriga (Hard mode)",
 		"answers": ["24608", "28360", "28380", "23015", "23416", "23767", "23453"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 82.0379167, "dec": 38.6891667 }
 	},
 	{
 		"id": "perseus",
 		"name": "Perseus",
 		"answers": ["15863", "14576", "18614", "13268", "14328"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 49.0862500, "dec": 43.3268889 }
 	},
 	{
 		"id": "aries",
 		"name": "Aries",
 		"answers": ["9884", "8832", "8903", "14838"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 35.5725000, "dec": 23.5459167 }
 	},
 	{
 		"id": "pegasus",
 		"name": "Pegasus",
 		"answers": ["107315", "113881", "113963", "1067", "112158", "112029", "112748", "109427"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 343.0862500, "dec": 21.1810833 }
 	},
 	{
 		"id": "andromeda",
 		"name": "Andromeda",
 		"answers": ["677", "5447", "9640", "3092"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 14.6354167, "dec": 36.1409444 }
 	},
 	{
 		"id": "ursaminor_easy",
 		"name": "Ursa minor (Easy mode)",
 		"answers": ["11767", "72607", "75097", "85822"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 164.2920833, "dec": 55.5653889 }
 	},
 	{
 		"id": "ursaminor_hard",
 		"name": "Ursa minor (Hard mode)",
 		"answers": ["11767", "72607", "75097", "85822", "82080", "77055", "79822"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 164.2920833, "dec": 55.5653889 }
 	},
 	{
 		"id": "draco_easy",
 		"name": "Draco (Easy mode)",
 		"answers": ["87833", "80331", "85670", "94376", "83895", "68756"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 238.1887500, "dec": 68.3028611 }
 	},
 	{
 		"id": "draco_hard",
@@ -218,13 +217,13 @@
 			"75458",
 			"56211"
 		],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 238.1887500, "dec": 68.3028611 }
 	},
 	{
 		"id": "camelopardalis",
 		"name": "Camelopardalis",
 		"answers": ["22783", "17959"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 60.4929167, "dec": 70.1044167 }
 	},
 	{
 		"id": "ursamajor",
@@ -236,7 +235,7 @@
 		"id": "cassiopiae",
 		"name": "Cassiopiae",
 		"answers": ["3179", "746", "4427", "6686", "8886"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 14.8562500, "dec": 62.1686944 }
 	},
 	{
 		"id": "leo",
@@ -253,91 +252,91 @@
 			"47508",
 			"48455"
 		],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 159.9129167, "dec": 18.9600278 }
 	},
 	{
 		"id": "virgo",
 		"name": "Virgo",
 		"answers": ["65474", "61941", "66249", "63608", "60129", "69701", "71957", "57757"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 201.4237500, "dec": -2.1157222 }
 	},
 	{
 		"id": "libra",
 		"name": "Libra",
 		"answers": ["72622", "74785", "73714", "75379", "76600", "76333", "77853"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 229.9991667, "dec": -16.3970278 }
 	},
 	{
 		"id": "scorpius",
 		"name": "Scorpius",
 		"answers": ["78821", "80763", "85927", "85696", "86228", "82396"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 251.7854167, "dec": -31.9574167 }
 	},
 	{
 		"id": "sagittarius",
 		"name": "Sagittarius",
 		"answers": ["92855", "90496", "89931", "90185"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 284.3645833, "dec": -29.3655556 }
 	},
 	{
 		"id": "aquila",
 		"name": "Aquila",
 		"answers": ["97649", "97278", "98036", "95501", "99473"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 293.9175000, "dec": 6.0287778 }
 	},
 	{
 		"id": "cygnus",
 		"name": "Cygnus",
 		"answers": ["102098", "95947", "100453"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 305.1908333, "dec": 39.8835278 }
 	},
 	{
 		"id": "lyra",
 		"name": "Lyra",
 		"answers": ["91262", "92420", "93194"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 282.7179167, "dec": 35.7903889 }
 	},
 	{
 		"id": "hercules",
 		"name": "Hercules",
 		"answers": ["84345", "80816", "81693", "84379", "83207", "84380", "81833"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 257.2141667, "dec": 33.9272222 }
 	},
 	{
 		"id": "bootes",
 		"name": "Bootes",
 		"answers": ["69673", "67927", "72105", "71075"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 217.9033333, "dec": 26.8024167 }
 	},
 	{
 		"id": "coronaborealis",
 		"name": "Corona Borealis",
 		"answers": ["76267", "75695", "76952"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 236.3966667 , "dec": 29.4698611}
 	},
 	{
 		"id": "ophiuchus",
 		"name": "Ophiuchus",
 		"answers": ["86032", "84012", "86742"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 263.6408333, "dec": -5.7196944 }
 	},
 	{
 		"id": "comaberenices",
 		"name": "Coma Berenices",
 		"answers": ["64241", "60742", "64394"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 192.6295833, "dec": 22.8590833 }
 	},
 	{
 		"id": "aquarius",
 		"name": "Aquarius",
 		"answers": ["102618", "106278", "109074", "113136", "110960"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 336.7333333, "dec":  -13.0852500 }
 	},
 	{
 		"id": "capricornus",
 		"name": "Capricornus",
 		"answers": ["102098", "100064", "100345", "100064", "106985"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 316.5866667, "dec": -17.9631111}
 	},
 	{
 		"id": "piscisaustrinus",
@@ -354,19 +353,19 @@
 			"107608",
 			"109289"
 		],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 335.6808333, "dec": -30.4053889 }
 	},
 	{
 		"id": "lupus",
 		"name": "Lupus",
 		"answers": ["71860", "73273", "76297", "75141", "75264", "74395", "78384", "69996", "75177"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 231.7145833 , "dec": -42.7170833 }
 	},
 	{
 		"id": "centaurus_easy",
 		"name": "Centaurus (Easy mode)",
 		"answers": ["71683", "68702", "68933", "61932", "66657", "71352"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 198.6187500, "dec":  -51.2558889 }
 	},
 	{
 		"id": "centaurus_hard",
@@ -386,67 +385,67 @@
 			"67464",
 			"67472"
 		],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 198.6187500, "dec": -51.2558889 }
 	},
 	{
 		"id": "crux",
 		"name": "Crux",
 		"answers": ["60718", "62434", "61084", "59747"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 187.8791667, "dec": -59.8352778}
 	},
 	{
 		"id": "tucana",
 		"name": "Tucana",
 		"answers": ["110130", "114996", "1599", "5896", "2484"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 350.8758333, "dec": -62.4803611 }
 	},
 	{
 		"id": "grus",
 		"name": "Grus",
 		"answers": ["68002", "112122", "108085", "112623", "114421"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 336.0875000, "dec": -45.2335556 }
 	},
 	{
 		"id": "pavo",
 		"name": "Pavo",
 		"answers": ["100751", "102395", "99240", "86929", "98495"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 292.1712500, "dec": -66.0660000 }
 	},
 	{
 		"id": "phoenix",
 		"name": "Phoenix",
 		"answers": ["2081", "5165", "6867", "765", "2072", "7083"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 14.3579167, "dec":  -46.3246389}
 	},
 	{
 		"id": "puppis",
 		"name": "Puppis",
 		"answers": ["39429", "35264", "39757", "32768", "31685", "36377", "38170"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 114.1470833, "dec": -37.8985833}
 	},
 	{
 		"id": "vela",
 		"name": "Vela",
 		"answers": ["44816", "39953", "45941", "42913", "52727", "48774"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra":141.8225000 , "dec": -50.1861111 }
 	},
 	{
 		"id": "carina",
 		"name": "Carina",
 		"answers": ["30438", "45238", "41037", "45556", "52419", "50099"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 130.9291667, "dec": -56.0360278}
 	},
 	{
 		"id": "triangulumaustrale_easy",
 		"name": "Triangulum Australe (Easy mode)",
 		"answers": ["82273", "77952", "74946"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 240.6579167, "dec": -67.3669167 }
 	},
 	{
 		"id": "triangulumaustrale_hard",
 		"name": "Triangulum Australe (Hard mode)",
 		"answers": ["82273", "77952", "74946", "79664", "76440"],
-		"initialRotation": { "ra": 0, "dec": 0 }
+		"initialRotation": { "ra": 240.6579167, "dec": -67.3669167}
 	},
 	{
 		"id": "pleiades",
