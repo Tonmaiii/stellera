@@ -17,8 +17,8 @@
 	let longitude: number | null;
 
 	export let data;
-	if (!data.category) goto('/menu/recommended');
-	const category = data.category as string;
+	if (!data.id) goto('/menu/recommended');
+	const category = data.id ?? 'recommended';
 	const maps = data.maps as GameMap[];
 	const hash = $page.url.hash.slice(1);
 	let selected = maps.find(({ id }) => id === hash) ?? null;
@@ -81,6 +81,12 @@
 
 <div class="container">
 	<div class="game-selector {selected ? 'selected' : 'unselected'}">
+		<div class="game-select-head">
+			<a href="/" class="home">
+				<i class="fas fa-angle-left" />
+			</a>
+			<span>{data.name}</span>
+		</div>
 		{#each maps as map}
 			<GameSelectorElement
 				{map}
@@ -142,8 +148,10 @@
 				</div>
 			</div>
 			<div class="play-wrapper">
-				<a href={`/game/${selected.id}?${gameParams}`} on:click={setReturnLocation(category)}
-					><span>PLAY</span></a
+				<a
+					class="play"
+					href={`/game/${selected.id}?${gameParams}`}
+					on:click={setReturnLocation(category)}><span>PLAY</span></a
 				>
 			</div>
 		{/if}
@@ -166,6 +174,24 @@
 		overflow-y: auto;
 		border-right: 1px solid #404040;
 		background-color: #1a1a1a;
+	}
+
+	.game-select-head {
+		text-align: center;
+		border-bottom: 1px solid #404040;
+		background-color: #171717;
+		padding: 0.25rem;
+		position: relative;
+	}
+
+	.home {
+		display: block;
+		position: absolute;
+		background-color: transparent;
+		color: white;
+		padding: 0;
+		cursor: pointer;
+		text-align: center;
 	}
 
 	.right {
@@ -233,7 +259,7 @@
 		background-color: #262626;
 	}
 
-	a {
+	.play {
 		background-color: #3ac7ff;
 		color: #000000;
 		text-decoration: none;
