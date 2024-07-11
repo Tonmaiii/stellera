@@ -14,7 +14,6 @@
 				friends, and become a star expert. Start your cosmic journey today!
 			</div>
 		</div>
-		<div class="logo-right"></div>
 	</div>
 	<div class="recommended">
 		<div class="recommended-head">Play our recommended games</div>
@@ -101,11 +100,8 @@
 	.logo-left {
 		display: flex;
 		flex-direction: column;
-		flex: 1;
-	}
-
-	.logo-right {
-		flex: 1;
+		width: min(100%, 40rem);
+		position: relative;
 	}
 
 	image,
@@ -171,5 +167,26 @@
 		padding: 0.25rem;
 		width: 4rem;
 		border-radius: 4rem;
+	}
+
+	@media only screen and (max-width: 600px) {
+		image,
+		svg {
+			width: 12rem;
+			height: 4rem;
+		}
+
+		.logo {
+			padding: 2rem;
+		}
+
+		.logo-left {
+			text-align: center;
+			align-items: center;
+		}
+
+		.recommended-body {
+			flex-direction: column;
+		}
 	}
 </style>

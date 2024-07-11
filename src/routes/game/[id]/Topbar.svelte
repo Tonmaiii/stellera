@@ -23,27 +23,29 @@
 	.container {
 		position: absolute;
 		display: flex;
-		font-size: 2rem;
+		font-size: 1.7rem;
 		color: white;
-		margin: 0.5rem;
+		margin: 0.25rem;
 		right: 0;
 	}
 
 	.name {
 		position: absolute;
-		font-size: 2rem;
+		font-size: 1.7rem;
 		color: white;
-		margin-top: 0.5rem;
+		margin-top: 0.25rem;
 		width: 100%;
 		text-align: center;
 	}
-
 	.item {
-		margin-right: 0.5rem;
-	}
-
-	.right .item {
 		margin-right: 0rem;
 		margin-left: 0.5rem;
+	}
+
+	@media only screen and (max-width: 550px) {
+		.name,
+		.container {
+			font-size: 1.2rem;
+		}
 	}
 </style>

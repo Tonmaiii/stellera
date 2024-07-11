@@ -80,7 +80,7 @@
 </script>
 
 <div class="container">
-	<div class="game-selector">
+	<div class="game-selector {selected ? 'selected' : 'unselected'}">
 		{#each maps as map}
 			<GameSelectorElement
 				{map}
@@ -92,8 +92,11 @@
 			/>
 		{/each}
 	</div>
-	<div class="right">
+	<div class="right {selected ? 'selected' : 'unselected'}">
 		{#if selected}
+			<button class="back" on:click={() => (selected = null)}>
+				<i class="fas fa-angle-left" />
+			</button>
 			<div class="game-settings">
 				<h1>{selected.name}</h1>
 				<TableSwitcher id={selected.id} />
@@ -251,5 +254,34 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+
+	.back {
+		display: none;
+	}
+
+	@media only screen and (max-width: 600px) {
+		.game-selector.selected {
+			display: none;
+		}
+
+		.right.unselected {
+			display: none;
+		}
+
+		.back {
+			display: block;
+			position: absolute;
+			width: 2rem;
+			height: 2rem;
+			background-color: transparent;
+			border: none;
+			margin: 0.5rem;
+			color: white;
+			font-size: 2rem;
+			padding: 0;
+			cursor: pointer;
+			text-align: center;
+		}
 	}
 </style>

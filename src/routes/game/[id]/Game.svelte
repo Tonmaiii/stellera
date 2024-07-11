@@ -267,4 +267,12 @@
 		flex-direction: column;
 		align-items: center;
 	}
+
+	@media only screen and (max-width: 550px) {
+		.back {
+			font-size: 1.2rem;
+			width: 1.2rem;
+			height: 1.2rem;
+		}
+	}
 </style>
