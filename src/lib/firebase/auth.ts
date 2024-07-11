@@ -78,7 +78,7 @@ export const initializeAuth = () => {
 };
 
 const updateProfile = async (user: User) => {
-	const userDocument = doc(db, 'players', user.uid);
+	const userDocument = doc(db, 'users', user.uid);
 	const userDocumentSnapshot = await getDoc(userDocument);
 	const data = (userDocumentSnapshot.data() ?? null) as UserEntry | null;
 	userData.set(data);
