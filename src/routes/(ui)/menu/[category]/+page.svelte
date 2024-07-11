@@ -5,6 +5,7 @@
 	import { getJson, setJson } from '$lib/localstorage/utils';
 	import { geolocation } from '$lib/util/geolocation';
 	import { setReturnLocation } from '$lib/util/store';
+	import type { GameMap } from '$lib/util/types';
 	import { afterUpdate, onMount } from 'svelte';
 	import GameSelectorElement from './GameSelectorElement.svelte';
 	import TableSwitcher from './TableSwitcher.svelte';
@@ -18,12 +19,7 @@
 	export let data;
 	if (!data.category) goto('/menu/recommended');
 	const category = data.category as string;
-	const maps = data.maps as {
-		id: string;
-		name: string;
-		answers: string[];
-		initialRotation?: { ra: number; dec: number };
-	}[];
+	const maps = data.maps as GameMap[];
 	const hash = $page.url.hash.slice(1);
 	let selected = maps.find(({ id }) => id === hash) ?? null;
 

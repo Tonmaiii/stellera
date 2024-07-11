@@ -64,7 +64,7 @@
 				longitude,
 				Date.now()
 			);
-			playerController.reset(alt, az);
+			playerController.reset(alt, az, map.initialRotation.zoom ?? 0);
 		} else playerController.reset();
 		resetTimer();
 	};

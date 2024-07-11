@@ -95,8 +95,8 @@ export class PlayerController {
 	reset = (alt = 0, az = 0, zoom = 0) => {
 		this.alt = alt;
 		this.az = az;
-		this.fov = 45;
 		this.zoom = zoom;
+		this.fov = this.zoomFactor ** zoom * 45;
 		this.zooming = false;
 		this.zoomDistance = 0;
 		this.playing = true;
