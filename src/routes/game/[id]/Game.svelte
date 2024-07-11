@@ -179,7 +179,7 @@
 
 	const exitGame = () => {
 		playerController.exit();
-		goto(`/menu#${map.id}`);
+		goto(`/`);
 	};
 </script>
 
