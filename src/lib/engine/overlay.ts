@@ -103,7 +103,7 @@ export class Overlay {
 		const w = starScreenPos[3 * i + 2];
 
 		if (w > 0 && this.flashFrame % 60 < 30) {
-			const size = starSize(star.magnitude, fov);
+			const size = starSize(star.magnitude, fov, this.canvas.height);
 			const screenX = ((x + 1) * this.canvas.width) / 2;
 			const screenY = ((y + 1) * this.canvas.height) / 2;
 			this.ctx.beginPath();
@@ -154,7 +154,7 @@ export class Overlay {
 		if (starScreenPos[3 * i + 2] > 1) return;
 		const x = ((starScreenPos[3 * i] + 1) / 2) * this.canvas.width;
 		const y = -((starScreenPos[3 * i + 1] - 1) / 2) * this.canvas.height;
-		const size = starSize(star.magnitude, fov);
+		const size = starSize(star.magnitude, fov, this.canvas.height);
 
 		const alpha = 1 - label.frame / this.labelDuration;
 

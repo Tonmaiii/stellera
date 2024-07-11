@@ -46,5 +46,7 @@ export const equatorialToAltAz = (
 	return { alt, az };
 };
 
-export const starSize = (magnitude: number, fov: number) =>
-	((1.5 ** (-magnitude - 10) * 1000 * 45) / fov) * ((fov / 45 - 1) * 0.6 + 1) * Math.min(fov, 1);
+export const starSize = (magnitude: number, fov: number, screenHeight: number) =>
+	((1.5 ** (-magnitude - 10) * screenHeight * 1.4 * 45) / fov) *
+	((fov / 45 - 1) * 0.6 + 1) *
+	Math.min(fov, 1);

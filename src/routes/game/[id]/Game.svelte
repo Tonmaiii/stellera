@@ -118,7 +118,7 @@
 			if (
 				delta < closest &&
 				(delta <= clickRange ** 2 ||
-					delta <= (starSize(star.magnitude, playerController.fov) / 2) ** 2)
+					delta <= (starSize(star.magnitude, playerController.fov, canvas.height) / 2) ** 2)
 			) {
 				closest = delta;
 				closestStar = star;
@@ -128,7 +128,7 @@
 				answers.includes(star.HIC) &&
 				delta < closestAnswer &&
 				(delta <= clickRange ** 2 ||
-					delta <= (starSize(star.magnitude, playerController.fov) / 2) ** 2)
+					delta <= (starSize(star.magnitude, playerController.fov, canvas.height) / 2) ** 2)
 			) {
 				closestAnswer = delta;
 				closestAnswerStar = star;

@@ -5,6 +5,7 @@ attribute vec3 vertPosition;
 attribute float magnitude;
 attribute vec3 color;
 uniform float fov;
+uniform vec2 screen;
 uniform mat4 transform;
 
 varying vec3 fragColor;
@@ -16,7 +17,7 @@ float glowSize = 7.0/5.0;
 void main()
 {   
     vec4 projected = transform * vec4(vertPosition, 1.0);
-    size = (pow(1.5, -magnitude - 10.0) * 1000.0 * 45.0 / fov) * ((fov / 45.0 - 1.0) * 0.6 + 1.0) * min(fov, 1.0);
+    size = (pow(1.5, -magnitude - 10.0) * screen.y * 1.4 * 45.0 / fov) * ((fov / 45.0 - 1.0) * 0.6 + 1.0) * min(fov, 1.0);
     gl_Position = projected;
     gl_PointSize = size * glowSize;
 
