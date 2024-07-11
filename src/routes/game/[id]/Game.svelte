@@ -92,13 +92,14 @@
 	};
 
 	let click = false;
-	const clickRange = 30;
+	const clickRange = 50;
 	const handleClick = (e: MouseEvent) => {
 		if (!playerController.playing) return;
 		if (!click) return;
 
-		const mouseX = e.clientX;
-		const mouseY = e.clientY;
+		const canvasPosition = canvas.getBoundingClientRect();
+		const mouseX = e.clientX - canvasPosition.x;
+		const mouseY = e.clientY - canvasPosition.y;
 
 		let closest = Infinity;
 		let closestStar: Star | null = null;
