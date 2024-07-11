@@ -1,4 +1,5 @@
 <script>
+	import { setReturnLocation } from '$lib/util/store';
 </script>
 
 <div class="contents">
@@ -24,7 +25,7 @@
 					One of the most recognizable constellation of the night sky, featuring the 'Belt of Orion'
 					made up of three aligned stars.
 				</p>
-				<a href="/menu/recommended#orion" class="play">PLAY</a>
+				<a href="/game/orion" on:click={setReturnLocation('recommended')} class="play">PLAY</a>
 			</div>
 			<div class="card">
 				<div class="card-head">Ursa Major</div>
@@ -32,7 +33,7 @@
 					Known as the Great Bear, Ursa Major is one of the largest and most recognizable
 					constellations in the night sky. Featuring the famous Big Dipper asterism.
 				</p>
-				<a href="/menu/recommended#ursamajor" class="play">PLAY</a>
+				<a href="/game/ursamajor" on:click={setReturnLocation('recommended')} class="play">PLAY</a>
 			</div>
 			<div class="card">
 				<div class="card-head">Bright Stars</div>
@@ -40,7 +41,7 @@
 					Explore the luminous giants of the night sky, from the dazzling Sirius to the brilliant
 					Vega. Learn about their characteristics and how to identify them.
 				</p>
-				<a href="/menu/recommended#10bright" class="play">PLAY</a>
+				<a href="/game/10bright" on:click={setReturnLocation('recommended')} class="play">PLAY</a>
 			</div>
 		</div>
 		<a href="/menu/recommended" class="more-recommended">Other recommended games →</a>

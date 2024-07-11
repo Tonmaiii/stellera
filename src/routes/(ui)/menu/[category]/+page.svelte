@@ -4,6 +4,7 @@
 	import Toggle from '$lib/components/Toggle.svelte';
 	import { getJson, setJson } from '$lib/localstorage/utils';
 	import { geolocation } from '$lib/util/geolocation';
+	import { setReturnLocation } from '$lib/util/store';
 	import { afterUpdate, onMount } from 'svelte';
 	import GameSelectorElement from './GameSelectorElement.svelte';
 	import TableSwitcher from './TableSwitcher.svelte';
@@ -15,7 +16,8 @@
 	let longitude: number | null;
 
 	export let data;
-	if (!data.maps) goto('/menu/recommended');
+	if (!data.category) goto('/menu/recommended');
+	const category = data.category as string;
 	const maps = data.maps as {
 		id: string;
 		name: string;
@@ -23,7 +25,6 @@
 		initialRotation?: { ra: number; dec: number };
 	}[];
 	const hash = $page.url.hash.slice(1);
-	console.log(maps);
 	let selected = maps.find(({ id }) => id === hash) ?? null;
 
 	let latitudeInput = '';
@@ -142,7 +143,9 @@
 				</div>
 			</div>
 			<div class="play-wrapper">
-				<a href={`/game/${selected.id}?${gameParams}`}><span>PLAY</span></a>
+				<a href={`/game/${selected.id}?${gameParams}`} on:click={setReturnLocation(category)}
+					><span>PLAY</span></a
+				>
 			</div>
 		{/if}
 	</div>

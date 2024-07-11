@@ -8,11 +8,11 @@
 	import { saveGame } from '$lib/localstorage/recordData';
 	import { data } from '$lib/util/data';
 	import shuffle from '$lib/util/shuffle';
-	import { initialized } from '$lib/util/store';
+	import { clearReturnLocation, initialized, returnLocation } from '$lib/util/store';
 	import { formatTime, resetTimer, stopTimer, timer } from '$lib/util/timer';
 	import type { GameMap, Star } from '$lib/util/types';
 	import { equatorialToAltAz, starSize } from '$lib/util/utils';
-	import { onMount,onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	if (!$data) throw new Error('stars data not loaded');
 	const { stars, starsIndexed, constellationship } = $data;
@@ -179,9 +179,15 @@
 
 	const exitGame = () => {
 		playerController.exit();
-		goto(`/`);
+		if ($returnLocation) {
+			const returnUrl = `/menu/${$returnLocation}#${map.id}`;
+			clearReturnLocation();
+			goto(returnUrl);
+			return;
+		}
+		goto('/menu/recommended');
 	};
-        onDestroy(exitGame);
+	onDestroy(() => playerController?.exit?.());
 </script>
 
 <canvas bind:this={canvas} />
