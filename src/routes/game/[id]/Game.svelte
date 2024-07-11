@@ -12,7 +12,7 @@
 	import { formatTime, resetTimer, stopTimer, timer } from '$lib/util/timer';
 	import type { GameMap, Star } from '$lib/util/types';
 	import { equatorialToAltAz, starSize } from '$lib/util/utils';
-	import { onMount } from 'svelte';
+	import { onMount,onDestroy } from 'svelte';
 
 	if (!$data) throw new Error('stars data not loaded');
 	const { stars, starsIndexed, constellationship } = $data;
@@ -176,6 +176,8 @@
 		playerController.addEventListeners(canvas);
 		$initialized = true;
 	});
+
+	oDestroy(exitGame);
 
 	const exitGame = () => {
 		playerController.exit();
