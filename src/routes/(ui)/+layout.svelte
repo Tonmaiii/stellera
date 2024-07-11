@@ -30,9 +30,7 @@
 			{/if}
 		</div>
 	</header>
-	<div class="content">
-		<slot></slot>
-	</div>
+	<slot></slot>
 </div>
 
 <style>
@@ -60,10 +58,6 @@
 		display: flex;
 		flex-direction: column;
 		height: 100%;
-	}
-
-	.content {
-		flex: 1;
 	}
 
 	a {
