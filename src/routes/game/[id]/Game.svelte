@@ -177,12 +177,11 @@
 		$initialized = true;
 	});
 
-	oDestroy(exitGame);
-
 	const exitGame = () => {
 		playerController.exit();
 		goto(`/`);
 	};
+        onDestroy(exitGame);
 </script>
 
 <canvas bind:this={canvas} />
