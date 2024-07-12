@@ -19,7 +19,7 @@
 			askName = true;
 			return;
 		}
-		goto('/menu');
+		goto('/');
 	};
 
 	const setDisplayName = async (name: string) => {
