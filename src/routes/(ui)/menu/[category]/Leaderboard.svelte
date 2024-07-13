@@ -8,16 +8,16 @@
 
 	type LeaderboardEntry = { time: number; accuracy: number; name: string; playerId: string };
 
+	let leaderboardCache = new Map<string, LeaderboardEntry[]>();
+	let userScoreCache = new Map<string, { placement: number; userScore: GameEntry | null }>();
+
 	export let id: string;
-	let previousId: string | null = null;
-	let scores: LeaderboardEntry[] | null = null;
+	$: scores = leaderboardCache.get(id) ?? null;
+	$: placement = userScoreCache.get(id)?.placement ?? -1;
+	$: userScore = userScoreCache.get(id)?.userScore ?? null;
 
-	let placement = -1;
-	let userScore: GameEntry | null = null;
-
-	const updateLeaderboard = async () => {
-		if (previousId === id) return;
-		scores = null;
+	const updateLeaderboard = async (id: string) => {
+		if (leaderboardCache.get(id)) return;
 		try {
 			const gamesCollection = collection(db, 'games');
 			const q = query(gamesCollection, where('gameId', '==', id), where('anonymous', '==', false));
@@ -41,7 +41,7 @@
 
 			const entries = Array.from(bestScoresMap.values());
 			if (entries.length === 0) {
-				scores = [];
+				leaderboardCache = leaderboardCache.set(id, []);
 				return;
 			}
 
@@ -53,8 +53,9 @@
 				}
 			});
 
-			placement = entries.findIndex((score) => score.playerId === $user.user?.uid);
-			userScore = entries.find((score) => score.playerId === $user.user?.uid) ?? null;
+			const placement = entries.findIndex((score) => score.playerId === $user.user?.uid);
+			const userScore = entries.find((score) => score.playerId === $user.user?.uid) ?? null;
+			userScoreCache = userScoreCache.set(id, { placement, userScore });
 
 			const topScores = entries.slice(0, 10);
 
@@ -71,19 +72,19 @@
 				userDisplayNamesMap.set(doc.id, data.name);
 			});
 
-			scores = topScores.map(({ playerId, time, accuracy }) => ({
+			const scores = topScores.map(({ playerId, time, accuracy }) => ({
 				time,
 				accuracy,
 				name: userDisplayNamesMap.get(playerId) ?? '',
 				playerId
 			}));
+			leaderboardCache = leaderboardCache.set(id, scores);
 		} catch (e) {
 			console.error('Error querying documents: ', e);
 		}
-		previousId = id;
 	};
 
-	afterUpdate(updateLeaderboard);
+	afterUpdate(() => updateLeaderboard(id));
 </script>
 
 <div class="container">
