@@ -7,7 +7,7 @@
 	export let total: number;
 </script>
 
-<div class="name">find {name}</div>
+<div class="name">{name}</div>
 
 <div class="container right">
 	<div class="item">{formatTime($timer)}</div>
