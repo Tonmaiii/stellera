@@ -7,7 +7,7 @@
 	export let total: number;
 </script>
 
-<div class="name">{name}</div>
+<div class="name">find: <strong>{name}</strong></div>
 
 <div class="container right">
 	<div class="item">{formatTime($timer)}</div>
@@ -23,7 +23,7 @@
 	.container {
 		position: absolute;
 		display: flex;
-		font-size: 1.7rem;
+		font-size: 1.5rem;
 		color: white;
 		margin: 0.25rem;
 		right: 0;
@@ -36,16 +36,24 @@
 		margin-top: 0.25rem;
 		width: 100%;
 		text-align: center;
+		margin-top: 2rem;
 	}
 	.item {
 		margin-right: 0rem;
 		margin-left: 0.5rem;
 	}
 
-	@media only screen and (max-width: 550px) {
-		.name,
+	@media only screen and (max-width: 550px), only screen and (max-height: 300px) {
+		.name {
+			font-size: 1rem;
+			margin-top: 1.5rem;
+		}
 		.container {
-			font-size: 1.2rem;
+			font-size: 1rem;
+		}
+
+		.item {
+			margin-left: 0.4rem;
 		}
 	}
 </style>

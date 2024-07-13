@@ -269,7 +269,7 @@
 		align-items: center;
 	}
 
-	@media only screen and (max-width: 550px) {
+	@media only screen and (max-width: 550px), only screen and (max-height: 300px) {
 		.back {
 			font-size: 1.2rem;
 			width: 1.2rem;
