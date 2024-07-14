@@ -1,8 +1,5 @@
 <script lang="ts">
-	import { initializeAuth, signOut, user } from '$lib/firebase/auth';
-	import { fetchData } from '$lib/util/data';
-	import { getLocation } from '$lib/util/geolocation';
-	import { onMount } from 'svelte';
+	import { signOut, user } from '$lib/firebase/auth';
 </script>
 
 <div class="main">
@@ -13,12 +10,12 @@
 					<image xlink:href="/images/stellera.svg" />
 				</svg>
 			</a>
-			<!-- <a href="/">Leaderboard</a> -->
+			<a href="/license.txt">License</a>
 		</div>
 
 		<div class="right">
 			{#if !$user.user || $user.user?.isAnonymous}
-				<a href="/login">Sign In</a>
+				<a href="/li">Sign In</a>
 			{:else}
 				<button on:click={signOut}>Sign Out</button>
 			{/if}
