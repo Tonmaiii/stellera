@@ -15,7 +15,7 @@
 
 		<div class="right">
 			{#if !$user.user || $user.user?.isAnonymous}
-				<a href="/li">Sign In</a>
+				<a href="/login">Sign In</a>
 			{:else}
 				<button on:click={signOut}>Sign Out</button>
 			{/if}
